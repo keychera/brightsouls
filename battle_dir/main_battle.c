@@ -11,3 +11,6 @@ int main () {
 	battle_initiate(player_name, &player_lvl, &player_hp, player_str, player_def, &player_exp);
 	return 0;
 }
+
+
+//this main driver is obsolete

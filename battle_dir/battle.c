@@ -5,11 +5,12 @@
 #include "lilfx.h"
 
 //global variable
+	//PlayerStat Player; declared globally
 //player and enemy status
 	char enemy_name[nameSize];
 	char player_name[nameSize];
 	int enemy_hp,enemy_str,enemy_def,enemy_reward;
-	int player_lvl,player_hp,player_str,player_def;
+	int player_lvl,player_hp,player_str,player_def,player_exp,player_maxhp,player_maxexp;
 	Stack enemy_actions;
 //battle simulation variable
 	int battle_round;
@@ -22,13 +23,13 @@
 	
 
 //directives
-void battle_initiate(char name[nameSize],int *lvl,int *hp,int str,int def,int *exp)
+void battle_initiate(int monsterID,int *battle_outcome)
 //initiate the battle system, which consist of loading enemies, displaying battle interface, and simulate the battle process
 {
 	battle_ongoing = true;
 	battle_round = 0;
-	battle_playerLoad(name,*lvl,*hp,str,def);
-	battle_enemyLoad();
+	battle_playerLoad(Player.Nama,Player.LVL,Player.HP,Player.STR,Player.DEF,Player.EXP,Player.maxHP,Player.maxEXP);
+	battle_enemyLoad(monsterID);
 	while (battle_ongoing) {
 		battle_engage();
 		battle_input();
@@ -38,7 +39,7 @@ void battle_initiate(char name[nameSize],int *lvl,int *hp,int str,int def,int *e
 	}
 }
 
-void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def)
+void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int maxhp,int maxexp)
 //load player stat input to machine's global variable
 {
 	strcpy(player_name,name);
@@ -46,9 +47,12 @@ void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def)
 	player_hp = hp;
 	player_str = str;
 	player_def = def;
+	player_exp = exp;
+	player_maxhp = maxhp;
+	player_maxexp = maxexp;
 }
 
-void battle_enemyLoad()
+void battle_enemyLoad(int monsterID)
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
 //NOT IMPLEMENTED
