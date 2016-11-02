@@ -1,0 +1,13 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="3">
+            <File firstVisibleLine="11" xOffset="0" scrollWidth="702" startPos="1595" endPos="1595" selMode="0" lang="C++" encoding="-1" filename="D:\codes\cFiles\TUBES brightsouls\stackt.h" backupFilePath="" originalFileLastModifTimestamp="1477821469" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="846" startPos="341" endPos="341" selMode="0" lang="C" encoding="-1" filename="D:\codes\cFiles\TUBES brightsouls\main_battle.c" backupFilePath="" originalFileLastModifTimestamp="1477831164" />
+            <File firstVisibleLine="6" xOffset="0" scrollWidth="1536" startPos="1624" endPos="1624" selMode="0" lang="C++" encoding="-1" filename="D:\codes\cFiles\TUBES brightsouls\battle.h" backupFilePath="" originalFileLastModifTimestamp="1477967478" />
+            <File firstVisibleLine="147" xOffset="0" scrollWidth="1480" startPos="4556" endPos="4556" selMode="0" lang="C" encoding="-1" filename="D:\codes\cFiles\TUBES brightsouls\battle.c" backupFilePath="" originalFileLastModifTimestamp="1477970271" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="360" startPos="126" endPos="126" selMode="0" lang="C++" encoding="-1" filename="D:\codes\cFiles\TUBES brightsouls\lilfx.h" backupFilePath="" originalFileLastModifTimestamp="1477819569" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="720" startPos="168" endPos="168" selMode="0" lang="C" encoding="-1" filename="D:\codes\cFiles\TUBES brightsouls\lilfx.c" backupFilePath="" originalFileLastModifTimestamp="1477823031" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>
