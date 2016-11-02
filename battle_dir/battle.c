@@ -58,7 +58,7 @@ void battle_enemyLoad()
 	enemy_str = 12;
 	enemy_def = 7;
 	enemy_reward = 25;
-	CreateEmpty(&enemy_actions);
+	CreateEmptyS(&enemy_actions);
 	Push(&enemy_actions," AABA"); //with a leading space each stack element
 	Push(&enemy_actions," AFBA");
 	Push(&enemy_actions," ABBA");

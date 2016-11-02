@@ -3,7 +3,8 @@
 
 #include <string.h>
 #include "boolean.h"
-#include "stackt.h"
+#include "stacklist.h"
+#include "queuelist.h"
 
 #define nameSize 99
 #define actionNumber 4
