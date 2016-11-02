@@ -2,8 +2,8 @@
 //#include "point.h"
 //#include "matriks.h"
 //#include "tree.h"
-#include "battle.h"
-#include "brightsoul.h"
+#include "header_dir/battle.h"
+#include "header_dir/brightsoul.h"
 #include <string.h>
 
 int main() {

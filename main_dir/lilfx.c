@@ -1,4 +1,4 @@
-#include "lilfx.h"
+#include "header_dir/lilfx.h"
 
 int digit(int n)
 //number of digit

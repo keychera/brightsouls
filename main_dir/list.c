@@ -1,5 +1,5 @@
 
-#include "list.h"
+#include "header_dir/list.h"
 
 /* Prototype manajemen memori */
 void Alokasi (address *P, infotype X)

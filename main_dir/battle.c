@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include "battle.h"  //30/10/2016 last edited - inserted commands
-#include "lilfx.h"
+#include "header_dir/battle.h"  //30/10/2016 last edited - inserted commands
+#include "header_dir/lilfx.h"
 
 //global variable
 	//PlayerStat Player; declared globally

@@ -1,7 +1,7 @@
 /* File : queuelist.h */
 /* Representasi queue dengan list berkait dengan first (HEAD) dan last (TAIL) */
 
-#include "queuelist.h"
+#include "header_dir/queuelist.h"
 
 
 boolean IsQEmpty (Queue Q)
