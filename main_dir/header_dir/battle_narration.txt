@@ -1,0 +1,10 @@
+ava test1
+avb <m> blocks <p>'s attack!
+avf <m> tries to flank but <p> attacks from front! <m> -<dmg> HP
+bva test 4
+bvb test 5 
+bvf test6
+fva test 7
+fvb test 8
+fvf test9
+stl <p> is as strong as <m> tho

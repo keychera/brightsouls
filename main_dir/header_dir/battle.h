@@ -6,6 +6,8 @@
 #include "boolean.h"
 #include "stacklist.h"
 #include "queuelist.h"
+#include "reader.h"
+#include "narrate.h"
 
 #define nameSize 99
 #define actionNumber 4
@@ -24,6 +26,9 @@
 	extern int game_state; // 1 for input, 2 for battle simulation
 	extern char player_action[actionNumber + 1]; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
 	extern char current_action[actionNumber + 1]; // + 1 because we're not using idx 0
+	extern int damageDone;
+//narrative variable
+	extern tNarrative narratives;
 //enemy show & close action array
     extern char display_action[actionNumber + 1];
 
@@ -36,15 +41,22 @@ void battle_enemyLoad(int monsterID);
 //picking random enemy data from enemy database
 void battle_engage();
 //readying enemy, setting rounds
-void battle_display();
+void battle_display(int simulatePass);
 //printing battle to screen, used by battle_input() and battle_simulate()
 void battle_input();
 //input sequence each round
 void battle_simulate();
 //calculate and simulate battle outcome each round
+//void battle_calculatepassive();
+//space for intermediate passives modifier
+void battle_calculateImpact(int *outcome);
+//calculate battle impact
+void battle_narrate(char narrateType,int outcome);
+//for narration
 int battle_compareAct(char proponent,char opponent);
 //return the value to determine what outcome 
 void battle_showAction(char currentAct[]);
 //randomized which action is hidden
+int isBoss(int id);
 
 #endif
