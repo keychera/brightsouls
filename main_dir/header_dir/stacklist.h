@@ -2,11 +2,11 @@
 #ifndef _STACKLIST_H
 #define _STACKLIST_H
 #include "boolean.h"
-#include "list.h"
+#include "list_str.h"
 
 
 /* Type stack dengan ciri TOP : */
-typedef struct { 
+typedef struct {
 	address TOP;  /* alamat TOP: elemen puncak */
 } Stack;
 

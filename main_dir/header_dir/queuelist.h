@@ -3,10 +3,10 @@
 #ifndef _QUEUELIST_H
 #define _QUEUELIST_H
 #include "boolean.h"
-#include "list.h"
+#include "list_str.h"
 
 /* Type queue dengan ciri HEAD dan TAIL : */
-typedef struct { 
+typedef struct {
 	address HEAD;  /* alamat penghapusan */
 	address TAIL;  /* alamat penambahan */
 } Queue;
@@ -32,7 +32,7 @@ void Add (Queue * Q, infotype X);
 /* Pada dasarnya adalah proses insert last */
 /* I.S. Q mungkin kosong */
 /* F.S. X menjadi TAIL, TAIL "maju" */
-void Del(Queue * Q, infotype * X);
+void Del(Queue * Q, infotype *X);
 /* Proses: Menghapus X pada bagian HEAD dari Q dan mendealokasi
    elemen HEAD */
 /* Pada dasarnya operasi delete first */

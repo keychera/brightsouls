@@ -4,18 +4,17 @@
 
 #include <stdlib.h>
 
-
 /* Konstanta */
 #define Nil NULL
 
 /* Deklarasi infotype */
-typedef char* infotype;
+typedef int infotype;
 
 /* Queue dengan representasi berkait dengan pointer */
 typedef struct tElmt * address;
-typedef struct tElmt { 
+typedef struct tElmt {
 	infotype Info;
-	address Next; 
+	address Next;
 } Elmt; 
 
 #define Next(P) (P)->Next

@@ -52,7 +52,7 @@ void Add (Queue * Q, infotype X)
 		}
 	}
 }
-void Del(Queue * Q, infotype * X)
+void Del(Queue * Q, infotype* X)
 /* Proses: Menghapus X pada bagian HEAD dari Q dan mendealokasi
    elemen HEAD */
 /* Pada dasarnya operasi delete first */

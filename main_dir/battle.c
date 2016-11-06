@@ -261,13 +261,13 @@ void battle_input()
 			i++;
 		}
 		battle_display();
-	}	
-	
+	}
 }
 
 void battle_simulate()
 //simulate and calculate battle outcomes each round
 {
+	getchar();
 	game_state = 1;
 	int i,battle_outcome;
 	for(i = 1;i <= 4;i++) {
@@ -275,6 +275,7 @@ void battle_simulate()
 		//battle_calculate(battle_outcome);
 		//battle_narrate('b',battle_outcome);
 		battle_display();
+		while(getchar() != '\n');
 	}
 	
 	
