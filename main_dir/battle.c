@@ -15,17 +15,21 @@
 //battle simulation variable
 	int battle_round;
 	boolean battle_ongoing;
-	int game_state; // 1 for input, 2 for battle simulation
+	int game_state; // 1 for input, 3 for battle simulation
 	char player_action[actionNumber + 1]; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
 	char current_action[actionNumber + 1]; // + 1 because we're not using idx 0
+	int damageDone;
+//narrative variable
+	tNarrative narratives;
 //enemy show & close action array
     char display_action[actionNumber + 1];
 	
 
 //directives
-void battle_initiate(int monsterID,int *battle_outcome)
-//initiate the battle system, which consist of loading enemies, displaying battle interface, and simulate the battle process
-{
+void battle_initiate(int monsterID,int *battle_outcome) {
+//initiate the battle system, which consist of loading enemies, 
+//displaying battle interface, and simulate the battle
+	int roundMax = isBoss(monsterID)? 20 : 10;
 	battle_ongoing = true;
 	battle_round = 0;
 	battle_playerLoad(Player.Nama,Player.LVL,Player.HP,Player.STR,Player.DEF,Player.EXP,Player.maxHP,Player.maxEXP);
@@ -34,14 +38,13 @@ void battle_initiate(int monsterID,int *battle_outcome)
 		battle_engage();
 		battle_input();
 		battle_simulate();
-		printf("works!\n");
-		battle_ongoing = false;
+		battle_ongoing = (battle_round <= roundMax);
 	}
+	//battle_conclude();
 }
 
-void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int maxhp,int maxexp)
+void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int maxhp,int maxexp){
 //load player stat input to machine's global variable
-{
 	strcpy(player_name,name);
 	player_lvl = lvl;
 	player_hp = hp;
@@ -52,11 +55,10 @@ void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int
 	player_maxexp = maxexp;
 }
 
-void battle_enemyLoad(int monsterID)
+void battle_enemyLoad(int monsterID){
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
 //NOT IMPLEMENTED
-{
 	strcpy(enemy_name,"dummy01");
 	enemy_hp = 42;
 	enemy_str = 12;
@@ -71,9 +73,8 @@ void battle_enemyLoad(int monsterID)
 	Push(&enemy_actions," ABAF");
 }
 
-void battle_engage()
+void battle_engage(){
 //readying enemy and player current action, setting rounds, <additional : setting narratives>
-{
 	infotype currentAct;
 	Pop(&enemy_actions,&currentAct);
 	int i;
@@ -87,10 +88,10 @@ void battle_engage()
 	battle_round++;
 }
 
-void battle_display()
+void battle_display(int simulatePass){
 //displaying battle situation when input and when simulation
-{
-	int sub_size = 10;
+//the input exclusive for void battle_simulate()
+	int sub_size = 12;
 	int name_size = 2*sub_size;
 	int display_size = ((name_size + 5*(sub_size)) + 12) ;
 	int i,j; //for intense looping right here
@@ -119,6 +120,7 @@ void battle_display()
 					case 2 :
 						printf("HP  : %d",player_hp);
 						spaces += digit(player_hp);
+						spaces += (player_hp < 0)? 1:0;
 						break;
 					case 3 :
 						printf("STR : %d",player_str);
@@ -158,7 +160,8 @@ void battle_display()
 		//hp
 			printf("|");
 			printf("HP  : %d",enemy_hp);
-			spaces = 6 + digit(player_hp);
+			spaces = 6 + digit(enemy_hp);
+			spaces += (enemy_hp < 0)? 1:0;
 			for(i = 1;i <= sub_size - spaces;i++) printf(" ");
 			printf("|");
 		//action
@@ -167,13 +170,21 @@ void battle_display()
 				switch (game_state) {
 					case 1 :for(i = 1;i <= actionNumber;i++) {
 								printf("%c ",display_action[i]);
-							} break;
-					case 2 :
+							}
+							for(i = 1;i <= (sub_size * 4) - 2;i++) printf(" ");
+							break;
+					case 3 :for(i = 1;i <= actionNumber;i++) {
+								if (i == simulatePass) printf(">");
+								if (i > simulatePass)
+									printf("%c ",display_action[i]);
+								else
+									printf("%c ",current_action[i]);
+							}
+							for(i = 1;i <= (sub_size * 4) - 3;i++) printf(" ");
 							break;
 					//default:
 				}
 			}
-			for(i = 1;i <= (sub_size * 4) - 2;i++) printf(" ");
 			printf("|");
 		//newline 'line'
 			printf("\n|");
@@ -197,7 +208,13 @@ void battle_display()
 			printf("%s attacked!",enemy_name);
 			for(i = 1;i <= display_size-2-strlen(enemy_name)-10;i++) printf(" ");
 			printf("|\n");
-			//writeNarrative();
+		//writeNarrative
+			for(j = 1;j <= narratives.size;j++) {
+				printf("|");
+				printf("%s",narratives.array[j-1]);
+				for(i = 1;i <= display_size-2-strlen(narratives.array[j-1]);i++) printf(" ");
+				printf("|\n");
+			}
 		//lower margin
 			printf("|");
 			for(i = 1;i <= display_size-2;i++) printf(" ");
@@ -232,6 +249,7 @@ void battle_display()
 	//user interface
 		switch (game_state) {
 			case 1	:
+			case 3	:
 				printf("    input here >> ");
 				break;
 			default :
@@ -240,63 +258,157 @@ void battle_display()
 			
 }
 
-void battle_input()
+void battle_input(){
 //input sequence each round
-{
+	narrate_createEmpty(&narratives);
+	narrate_narrativeAdd(&narratives,"Please input your action");
 	char inp;
 	game_state = 1;
 	//battle_narrate('i',0);
-	battle_display();
+	battle_display(0);
 	int i = 1;
-	while (i != 5) {
-		scanf(" %c",&inp);
-		if (inp == 'E') {
-			if (i != 1) {
+	while (i != 6) {
+		if (i < 5) {
+			scanf(" %c",&inp);
+			if (inp == 'E') {
+				if (i != 1) {
+					player_action[i-1] = '_';
+					i--;
+				}
+			} else {
+				//assumption : the input is always correct
+				player_action[i] = inp;
+				i++;
+				if (i == 5) {
+					narrate_narrativeDel(&narratives);
+					narrate_narrativeAdd(&narratives,"Any input but E to confirm actions, E to delete last action");
+				}
+			}
+			battle_display(0);
+		} else {
+			scanf(" %c",&inp);
+			if (inp == 'E') {
 				player_action[i-1] = '_';
 				i--;
+				narrate_narrativeDel(&narratives);
+				narrate_narrativeAdd(&narratives,"Please input your action");
+			} else {
+				i++;
 			}
-		} else {
-			//assumption : the input is always correct
-			player_action[i] = inp;
-			i++;
+			battle_display(0);
 		}
-		battle_display();
+		
 	}
+	
 }
 
-void battle_simulate()
+void battle_simulate(){
 //simulate and calculate battle outcomes each round
-{
+	narrate_createEmpty(&narratives);
 	getchar();
-	game_state = 1;
-	int i,battle_outcome;
+	game_state = 3;
+	int i,round_outcome;
 	for(i = 1;i <= 4;i++) {
-		battle_outcome = battle_compareAct(player_action[i],current_action[i]);
-		//battle_calculate(battle_outcome);
-		//battle_narrate('b',battle_outcome);
-		battle_display();
+		round_outcome = battle_compareAct(player_action[i],current_action[i]);
+		//battle_calculatePassive();
+		battle_calculateImpact(&round_outcome);
+		battle_narrate('b',round_outcome);
+		battle_display(i);
 		while(getchar() != '\n');
 	}
-	
-	
 }
 
-int battle_compareAct(char proponent,char opponent)
+void battle_calculateImpact(int* outcome){
+//calculate battle impact
+	damageDone = 0;
+	switch (*outcome) {
+		//case 2,4,5 doesn't affect both sides, no damage done
+		case 1	:
+		case 9	:
+				if (player_str > enemy_str) {
+					damageDone = player_str - enemy_def;
+					enemy_hp -= damageDone;
+				} else {
+					if (player_str < enemy_str) {
+						damageDone = enemy_str - player_def;
+						player_hp -= damageDone;
+					} else {
+						*outcome = 10;
+					}
+				}
+			break;
+		case 3	:
+				damageDone = player_str;
+				enemy_hp -= damageDone;
+			break;
+		case 6	:
+				damageDone = enemy_str;
+				player_hp -= damageDone;
+			break;
+		case 7	:
+				damageDone = enemy_str;
+				player_hp -= damageDone;
+			break;
+		case 8	:
+				damageDone = player_str;
+				enemy_hp -= damageDone;
+			break;
+		default:
+		printf("this shouldn't be printed\n");
+	}
+}
+
+void battle_narrate(char narrateType,int outcome){
+//for narration
+	if (narrateType == 'b') {
+		reader_openFile("header_dir/battle_narration.txt");
+		char* battleStatus[5]; 	//passing reference for reader_build 
+								//where 0 : player name 1 : enemy name 2 : damageDone
+		battleStatus[0] = player_name;
+		battleStatus[1] = enemy_name;
+		char intToStr[strlength];
+		sprintf(intToStr,"%d",damageDone);
+		battleStatus[2] = intToStr;
+		char code[strlength],sentence[strlength];
+		switch(outcome) {
+			case 1 : strcpy(code,"ava");break;
+			case 2 : strcpy(code,"avb");break;
+			case 3 : strcpy(code,"avf");break;
+			case 4 : strcpy(code,"bva");break;
+			case 5 : strcpy(code,"bvb");break;
+			case 6 : strcpy(code,"bvf");break;
+			case 7 : strcpy(code,"fva");break;
+			case 8 : strcpy(code,"fvb");break;
+			case 9 : strcpy(code,"fvf");break;
+			case 10: strcpy(code,"stl");break;
+			default :
+			strcpy(code,"999");
+		}
+		reader_build(code,battleStatus,sentence);
+		reader_close();
+		if (sentence != NULL){
+			narrate_narrativeDel(&narratives);
+			narrate_narrativeAdd(&narratives,sentence);
+			narrate_narrativeAdd(&narratives,"Press enter to continue");
+		}
+	}
+}
+
+int battle_compareAct(char proponent,char opponent){
 //return the value to determine what outcome, return 0 if the outcome is undefined 
 /* return val mapping
-	p	o	outcome			value
-	A	A	not yet			1
-		B	o blocked p		2
-		F	p attacked o	3
-	B	A	p blocked o		4
-		B	not yet			5
-		F	o flanked p		6
-	F	A	o attacked p	7
-		B	p flanked o		8
-		F	not yet			9
+	p	o	outcome						value	affects
+	A	A	will dmg if higher str		1		depends
+		B	o blocked p					2		noone
+		F	p attacked o				3		enemy
+	B	A	p blocked o					4		noone
+		B	do nothing					5		noone
+		F	o flanked p					6		player
+	F	A	o attacked p				7		player
+		B	p flanked o					8		enemy
+		F	will dmg if higher str		9		depends
 	
 */
-{
 	int out = 0;
 	switch (proponent) {
 		case 'A' :
@@ -325,10 +437,9 @@ int battle_compareAct(char proponent,char opponent)
 	return out;
 }
 
-void battle_showAction(char currentAct[])
+void battle_showAction(char currentAct[]){
 //randomized which action is hidden
 //NOT IMPLEMENTED
-{
 	int i,j,k;
     srand (time(NULL));
     j = (rand()%4)+1; // Plus 1 because starting index at 1
@@ -343,4 +454,9 @@ void battle_showAction(char currentAct[])
 
     display_action[j] = '#';
     display_action[k] = '#';
+}
+
+int isBoss(int id){
+//NOT IMPLEMENTED
+	return false;
 }
