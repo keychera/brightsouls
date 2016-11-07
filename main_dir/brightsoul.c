@@ -6,10 +6,12 @@
 #include "header_dir/brightsoul.h"
 #include "header_dir/monsterdb.h"
 #include <string.h>
+#include <stdio.h>
 
 int main() {
     // start coding here
 	int battle_outcome;
+	EnemyStat enemy;
 	LoadEnemy("MonsterDB.txt");
 	Enemy[1].ID = 1;
 	strcpy(Player.Nama,"chera");

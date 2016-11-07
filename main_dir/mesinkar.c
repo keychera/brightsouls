@@ -33,12 +33,15 @@ void ADV() {
 
 	/* Algoritma */
 	retval = fscanf(pita,"%c",&CC);
-	EndBaris = (CC == MARK);
 	EOP = (CC == ENDMARK);
-	if (EndBaris) {
-		fscanf(pita, "%*[^\n]\n"); //Skip to next line
-	}
 	if (EOP) {
        fclose(pita);
  	}
+}
+
+void ADVROW() { //ONLY USE THIS WHEN ENDKATA IS TRUE //ADVANCE TO NEXT LINE
+	EndBaris = (CC == MARK);
+	if (EndBaris) {
+		fscanf(pita, "%c", &CC); //Skip to next line
+	}
 }

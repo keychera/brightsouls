@@ -1,6 +1,6 @@
 #include "header_dir/mesinkata.h"
 #include "header_dir/monsterdb.h"
-
+#include <stdio.h>
 
 void LoadEnemy(char namaFile[]){ //Membaca database enemy dari file eksternal, dijalankan diawal program
 	int statNumber = 0; // Nama = 0, HP = 1, STR = 2, DEF = 3, EXP = 4, ACTION = 5-15	
@@ -8,7 +8,7 @@ void LoadEnemy(char namaFile[]){ //Membaca database enemy dari file eksternal, d
 	enemyCount = 0;	
 	STARTKATA(namaFile);
 	while (!EndFile) {
-		ADVKATA(); //Skip Monster ID
+		ADVKATA(); //Skip Monster ID	
 		while(!EndKata) {
 			if (CKata.TabKata[1] != '|'){
 				switch(statNumber) {
@@ -36,8 +36,9 @@ void LoadEnemy(char namaFile[]){ //Membaca database enemy dari file eksternal, d
 			}
 			ADVKATA();
 		}
-		ADV();
-		actNumber = statNumber = 0;
+		ADVROW();
+		actNumber = 0;
+		statNumber = 0;
 		enemyCount++;
 		ADVKATA();
 	}

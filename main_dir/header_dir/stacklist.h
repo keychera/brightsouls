@@ -27,7 +27,7 @@ void Push (Stack * S, infotype X);
 /* F.S. X menjadi TOP yang baru jika alokasi X berhasil, */
 /*      jika tidak, S tetap */
 /* Pada dasarnya adalah operasi Insert First pada list linier */
-void Pop (Stack * S, infotype * X);
+void Pop (Stack * S, infotype X);
 /* Menghapus X dari Stack S. */
 /* I.S. S tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, */

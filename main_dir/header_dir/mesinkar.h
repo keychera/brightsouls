@@ -28,4 +28,8 @@ void ADV();
           CC mungkin = MARK
           Jika  CC = MARK maka EOP akan menyala (true) */
 
+void ADVROW();
+//ONLY USE THIS WHEN ENDKATA IS TRUE 
+//ADVANCE TO NEXT LINE
+
 #endif

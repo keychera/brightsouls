@@ -59,10 +59,11 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
 //NOT IMPLEMENTED
-	int i,j,r[10];
+	int i,j,k,r[10];
+	char s[actionNumber+1];
 	EnemyStat curEnemy;
 	curEnemy = GetEnemy(monsterID, monsterLVL); //Second argument is LVL
-	strcpy(enemy_name,curEnemy.Nama);
+	strcpy(enemy_name,curEnemy.Nama); //Gak boleh pakai string.h
 	enemy_hp = curEnemy.HP;
 	enemy_str = curEnemy.STR;
 	enemy_def = curEnemy.DEF;
@@ -80,18 +81,22 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 			} else 
 			{
 				j = 0;
-				srand(time(NULL));
 				r[i] = rand() % 10;
 			}			
 		}
-		Push(&enemy_actions, curEnemy.ACTION[r[i]]);
+		s[0] = ' ';
+		for (k = 1;k <= actionNumber;k++)
+		{
+			s[k] = curEnemy.ACTION[r[i]][k-1];
+		}
+		Push(&enemy_actions, s);
 	}
 }
 
 void battle_engage(){
 //readying enemy and player current action, setting rounds, <additional : setting narratives>
-	infotype currentAct;
-	Pop(&enemy_actions,&currentAct);
+	char currentAct[actionNumber+1];
+	Pop(&enemy_actions,currentAct);
 	int i;
 	for(i = 1;i <= actionNumber;i++){
 		current_action[i] = currentAct[i];

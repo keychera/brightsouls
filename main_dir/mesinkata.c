@@ -35,6 +35,7 @@ void STARTKATA(char File[])
 		else {
 		    EndKata = false;
 		    SalinKata();
+			IgnoreBlank();
 		}
 	} else {
 		EndFile = true;	
@@ -56,6 +57,7 @@ void ADVKATA()
 		else {
 			EndKata = false;
 		    SalinKata();
+			IgnoreBlank();
 		}
 	} else {
 		EndFile = true;	
