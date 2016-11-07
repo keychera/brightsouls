@@ -10,29 +10,31 @@ void LoadEnemy(char namaFile[]){ //Membaca database enemy dari file eksternal, d
 	while (!EndFile) {
 		ADVKATA(); //Skip Monster ID
 		while(!EndKata) {
-			switch(statNumber) {
-				case 0:
-					KataToString(CKata, enemy[enemyCount].Nama);
-					break;
-				case 1:
-					enemy[enemyCount].HP = 	KataToInteger(CKata);
-					break;
-				case 2:
-					enemy[enemyCount].STR = KataToInteger(CKata);
-					break;
-				case 3:
-					enemy[enemyCount].DEF = KataToInteger(CKata);
-					break;
-				case 4:
-					enemy[enemyCount].EXP = KataToInteger(CKata);
-					break;
-				default:
-					KataToString(CKata, enemy[enemyCount].ACTION[actNumber]);
-					actNumber++;
-					break;
+			if (CKata.TabKata[1] != '|'){
+				switch(statNumber) {
+					case 0:
+						KataToString(CKata, enemy[enemyCount].Nama);
+						break;
+					case 1:
+						enemy[enemyCount].HP = 	KataToInteger(CKata);
+						break;
+					case 2:
+						enemy[enemyCount].STR = KataToInteger(CKata);
+						break;
+					case 3:
+						enemy[enemyCount].DEF = KataToInteger(CKata);
+						break;
+					case 4:
+						enemy[enemyCount].EXP = KataToInteger(CKata);
+						break;
+					default:
+						KataToString(CKata, enemy[enemyCount].ACTION[actNumber]);
+						actNumber++;
+						break;
+				}
+				statNumber++;
 			}
 			ADVKATA();
-			statNumber++;
 		}
 		ADV();
 		actNumber = statNumber = 0;

@@ -33,11 +33,11 @@
     extern char display_action[actionNumber + 1];
 
 //directives
-void battle_initiate(int monsterID,int *battle_outcome);
+void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome);
 //initiate the battle system, which consist of loading enemies, displaying battle interface, and simulate the battle process
 void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int player_maxhp,int player_maxexp);
 //load player stat input to machine's global variable
-void battle_enemyLoad(int monsterID);
+void battle_enemyLoad(int monsterID,int monsterLVL);
 //picking random enemy data from enemy database
 void battle_engage();
 //readying enemy, setting rounds

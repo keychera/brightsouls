@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "header_dir/battle.h"  //30/10/2016 last edited - inserted commands
 #include "header_dir/lilfx.h"
+#include "header_dir/monsterdb.h"
 
 //global variable
 	//PlayerStat Player; declared globally
@@ -23,17 +24,16 @@
 	tNarrative narratives;
 //enemy show & close action array
     char display_action[actionNumber + 1];
-	
 
 //directives
-void battle_initiate(int monsterID,int *battle_outcome) {
+void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome) {
 //initiate the battle system, which consist of loading enemies, 
 //displaying battle interface, and simulate the battle
 	int roundMax = isBoss(monsterID)? 20 : 10;
 	battle_ongoing = true;
 	battle_round = 0;
 	battle_playerLoad(Player.Nama,Player.LVL,Player.HP,Player.STR,Player.DEF,Player.EXP,Player.maxHP,Player.maxEXP);
-	battle_enemyLoad(monsterID);
+	battle_enemyLoad(monsterID,monsterLVL);
 	while (battle_ongoing) {
 		battle_engage();
 		battle_input();
@@ -55,22 +55,37 @@ void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int
 	player_maxexp = maxexp;
 }
 
-void battle_enemyLoad(int monsterID){
+void battle_enemyLoad(int monsterID,int monsterLVL){
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
 //NOT IMPLEMENTED
-	strcpy(enemy_name,"dummy01");
-	enemy_hp = 42;
-	enemy_str = 12;
-	enemy_def = 7;
-	enemy_reward = 25;
+	int i,j,r[10];
+	EnemyStat curEnemy;
+	curEnemy = GetEnemy(monsterID, monsterLVL); //Second argument is LVL
+	strcpy(enemy_name,curEnemy.Nama);
+	enemy_hp = curEnemy.HP;
+	enemy_str = curEnemy.STR;
+	enemy_def = curEnemy.DEF;
+	enemy_reward = curEnemy.EXP;
 	CreateEmptyS(&enemy_actions);
-	Push(&enemy_actions," AABA"); //with a leading space each stack element
-	Push(&enemy_actions," AFBA");
-	Push(&enemy_actions," ABBA");
-	Push(&enemy_actions," FFBA");
-	Push(&enemy_actions," AFFF");
-	Push(&enemy_actions," ABAF");
+	for (i = 0; i < 10; i++)
+	{
+		j = 0;
+		srand(time(NULL));
+		r[i] = rand() % 10;
+		while (i > j){
+			if(r[i] != r[j])
+			{
+				j++;
+			} else 
+			{
+				j = 0;
+				srand(time(NULL));
+				r[i] = rand() % 10;
+			}			
+		}
+		Push(&enemy_actions, curEnemy.ACTION[r[i]]);
+	}
 }
 
 void battle_engage(){
