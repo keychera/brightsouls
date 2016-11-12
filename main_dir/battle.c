@@ -4,6 +4,7 @@
 #include "header_dir/battle.h"  //30/10/2016 last edited - inserted commands
 #include "header_dir/lilfx.h"
 #include "header_dir/monsterdb.h"
+#include "header_dir/brightsoul.h"
 
 //global variable
 	//PlayerStat Player; declared globally
@@ -27,6 +28,12 @@
 
 //directives
 void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome) {
+/*
+battle_outcome value table
+	Win					= 1
+	Lose 				= 2
+	Draw | Round Clear	= 3
+*/
 //initiate the battle system, which consist of loading enemies, 
 //displaying battle interface, and simulate the battle
 	int roundMax = isBoss(monsterID)? 20 : 10;
@@ -39,10 +46,51 @@ void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome) {
 		battle_input();
 		battle_simulate();
 		battle_ongoing = (battle_round <= roundMax);
+		*battle_outcome = battle_conclude();
 	}
-	//battle_conclude();
 }
 
+int battle_conclude()
+{
+//battle_conlude return battle_outcome value
+	if (player_hp > 0 && enemy_hp > 0) {
+		Player.HP = player_hp;
+		return 3;
+	}
+	else if (player_hp > 0 && enemy_hp <= 0)
+	{
+		Player.HP = player_hp;
+		Player.EXP += enemy_reward;
+		if (Player.EXP >= Player.maxEXP)
+		{
+			Player.EXP = Player.maxEXP - Player.EXP;
+			battle_lvlup();
+		}
+		battle_ongoing = false;
+		return 1;
+	}
+	else if (player_hp <= 0 && enemy_hp > 0)
+	{
+		Player.HP = 0;
+		battle_ongoing = false;
+		return 2;
+	}
+}
+
+void battle_lvlup(){
+/* Player Level Up Calculation	
+	
+	HP 	= HP + (PlayerLVL%2 + 2) + (PlayerLVL%5/5)
+	STR = STR + (PlayerLVL%2 + 1) + (PlayerLVL%5/5)
+	DEF = DEF + (PlayerLVL%2 + 1)
+	EXP = EXP + (PlayerLVL*EXP/2)
+*/
+	Player.LVL++;
+	Player.maxHP += (Player.LVL%2 + 2) + (Player.LVL%2/5);
+	Player.STR += (Player.LVL%2 + 1) + (Player.LVL%2/5);
+	Player.DEF += (Player.LVL%2 + 1);
+	Player.maxEXP += (Player.LVL*Player.maxEXP/2);
+}
 void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int maxhp,int maxexp){
 //load player stat input to machine's global variable
 	strcpy(player_name,name);
@@ -475,6 +523,8 @@ void battle_showAction(char currentAct[]){
     display_action[j] = '#';
     display_action[k] = '#';
 }
+
+
 
 int isBoss(int id){
 //NOT IMPLEMENTED

@@ -16,12 +16,12 @@ int main() {
 	Enemy[1].ID = 1;
 	strcpy(Player.Nama,"chera");
 	Player.LVL = 1;
-	Player.HP = 10;
-	Player.STR = 5;
-	Player.DEF = 2;
+	Player.HP = 25;
+	Player.STR = 8;
+	Player.DEF = 7;
 	Player.EXP = 0;
-	Player.maxHP = 10;
-	Player.maxEXP = 9999;
+	Player.maxHP = 25;
+	Player.maxEXP = 100;
 	battle_initiate(Enemy[1].ID, 1,&battle_outcome);
     return 0;
 }

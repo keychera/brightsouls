@@ -49,12 +49,14 @@ EnemyStat GetEnemy(int id, int monsterLVL){
 		HP = HP + monsterLVL*2
 		STR = STR + monsterLVL
 		DEF = DEF + monsterLVL
-		EXP = EXP + monsterLVL*10
+		EXP = EXP + monsterLVL*EXP
 	*/
-	enemy[id].HP = enemy[id].HP + monsterLVL*2;
-	enemy[id].STR = enemy[id].STR + monsterLVL;
-	enemy[id].DEF = enemy[id].DEF + monsterLVL;
-	enemy[id].EXP = enemy[id].EXP + monsterLVL*10;
+	if (monsterLVL > 1) {
+		enemy[id].HP 	+= monsterLVL*2;
+		enemy[id].STR 	+= monsterLVL;
+		enemy[id].DEF 	+= monsterLVL;
+		enemy[id].EXP 	+= monsterLVL*enemy[id].EXP;
+	}
 	return enemy[id];
 }
 
