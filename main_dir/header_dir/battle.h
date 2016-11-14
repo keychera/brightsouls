@@ -2,7 +2,7 @@
 #define battle_H
 
 #include "brightsoul.h"
-#include <string.h>
+#include "mystring.h"
 #include "boolean.h"
 #include "stacklist.h"
 #include "queuelist.h"

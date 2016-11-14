@@ -1,8 +1,7 @@
 #include "header_dir/lilfx.h"
 
-int digit(int n)
+int digit(int n){
 //number of digit
-{
 	int ret;
 	if ((n % 10) == n) {
 		ret = 1;
@@ -12,4 +11,10 @@ int digit(int n)
 	return ret;
 }
 
+int abs(int n){
+	if (n >= 0)
+		return n;
+	else
+		return -n;
+}
 

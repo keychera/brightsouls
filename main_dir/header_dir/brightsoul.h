@@ -5,6 +5,8 @@
 #define SMax 50
 #define EMax 5
 
+#define clear() printf("\033[H\033[J")
+
 typedef struct SkillStat {
     //Kata Nama;
     int Stat;                   // 0 : HP, 1 : STR, 2 : DEF

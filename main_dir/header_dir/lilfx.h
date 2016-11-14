@@ -6,4 +6,7 @@
 int digit(int n);
 //number of digit
 
+int abs(int n);
+//absolute val
+
 #endif

@@ -12,12 +12,12 @@ int main () {
 	printf("%s\n",inp);
 	
 	printf("open the file : ");
-	scanf("%s",&inp);
+	scanf("%s",inp);
 	boolean fileopened = reader_openFile(inp);
 	if (fileopened) {
 		printf("file opened!\n");
 		printf("search ID : ");
-		scanf("%s",&inp);
+		scanf("%s",inp);
 		reader_build(inp,dummy,outp);
 		if (outp != NULL) 
 			printf("%s\n",outp);

@@ -4,13 +4,14 @@
 //#include "tree.h"
 #include "header_dir/battle.h"
 #include "header_dir/brightsoul.h"
-#include <string.h>
+#include "header_dir/mystring.h"
+
 
 int main() {
     // start coding here
 	int battle_outcome;
 	Enemy[1].ID = 1;
-	strcpy(Player.Nama,"chera");
+	mystrcpy(Player.Nama,"chera");
 	Player.LVL = 1;
 	Player.HP = 10;
 	Player.STR = 5;

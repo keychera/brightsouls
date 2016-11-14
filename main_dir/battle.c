@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <termios.h>
 #include "header_dir/battle.h"  //30/10/2016 last edited - inserted commands
 #include "header_dir/lilfx.h"
 
@@ -45,7 +46,7 @@ void battle_initiate(int monsterID,int *battle_outcome) {
 
 void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int maxhp,int maxexp){
 //load player stat input to machine's global variable
-	strcpy(player_name,name);
+	mystrcpy(player_name,name);
 	player_lvl = lvl;
 	player_hp = hp;
 	player_str = str;
@@ -59,7 +60,7 @@ void battle_enemyLoad(int monsterID){
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
 //NOT IMPLEMENTED
-	strcpy(enemy_name,"dummy01");
+	mystrcpy(enemy_name,"dummy01");
 	enemy_hp = 42;
 	enemy_str = 12;
 	enemy_def = 7;
@@ -96,7 +97,7 @@ void battle_display(int simulatePass){
 	int display_size = ((name_size + 5*(sub_size)) + 12) ;
 	int i,j; //for intense looping right here
 	int spaces;
-	system("cls"); //somehow clrscr() doesn't work here
+	clear(); //somehow clrscr() doesn't work here
 	//upperline
 		printf(" ");
 		for(i = 1;i <= display_size-2;i++) printf("_");
@@ -105,8 +106,8 @@ void battle_display(int simulatePass){
 	//player stat
 		//name
 			printf("|");
-			printf("%s",player_name); //assumption : name under 20 char
-			for(i = 1;i <= name_size - strlen(player_name);i++) printf(" ");
+			myprintstr(player_name); //assumption : name under 20 char
+			for(i = 1;i <= name_size - mystrlen(player_name);i++) printf(" ");
 			printf("|");
 		//the rest of the stat
 			for(j = 1;j <= 5;j++) {
@@ -154,8 +155,8 @@ void battle_display(int simulatePass){
 	//enemy stat
 		//name
 			printf("|");
-			printf("%s",enemy_name); //assumption : name under 20 char
-			for(i = 1;i <= name_size - strlen(enemy_name);i++) printf(" ");
+			myprintstr(enemy_name); //assumption : name under 20 char
+			for(i = 1;i <= name_size - mystrlen(enemy_name);i++) printf(" ");
 			printf("|");
 		//hp
 			printf("|");
@@ -206,13 +207,13 @@ void battle_display(int simulatePass){
 		//text
 			printf("|");
 			printf("%s attacked!",enemy_name);
-			for(i = 1;i <= display_size-2-strlen(enemy_name)-10;i++) printf(" ");
+			for(i = 1;i <= display_size-2-mystrlen(enemy_name)-10;i++) printf(" ");
 			printf("|\n");
 		//writeNarrative
 			for(j = 1;j <= narratives.size;j++) {
 				printf("|");
-				printf("%s",narratives.array[j-1]);
-				for(i = 1;i <= display_size-2-strlen(narratives.array[j-1]);i++) printf(" ");
+				myprintstr(narratives.array[j-1]);
+				for(i = 1;i <= display_size-2-mystrlen(narratives.array[j-1]);i++) printf(" ");
 				printf("|\n");
 			}
 		//lower margin
@@ -371,18 +372,18 @@ void battle_narrate(char narrateType,int outcome){
 		battleStatus[2] = intToStr;
 		char code[strlength],sentence[strlength];
 		switch(outcome) {
-			case 1 : strcpy(code,"ava");break;
-			case 2 : strcpy(code,"avb");break;
-			case 3 : strcpy(code,"avf");break;
-			case 4 : strcpy(code,"bva");break;
-			case 5 : strcpy(code,"bvb");break;
-			case 6 : strcpy(code,"bvf");break;
-			case 7 : strcpy(code,"fva");break;
-			case 8 : strcpy(code,"fvb");break;
-			case 9 : strcpy(code,"fvf");break;
-			case 10: strcpy(code,"stl");break;
+			case 1 : mystrcpy(code,"ava");break;
+			case 2 : mystrcpy(code,"avb");break;
+			case 3 : mystrcpy(code,"avf");break;
+			case 4 : mystrcpy(code,"bva");break;
+			case 5 : mystrcpy(code,"bvb");break;
+			case 6 : mystrcpy(code,"bvf");break;
+			case 7 : mystrcpy(code,"fva");break;
+			case 8 : mystrcpy(code,"fvb");break;
+			case 9 : mystrcpy(code,"fvf");break;
+			case 10: mystrcpy(code,"stl");break;
 			default :
-			strcpy(code,"999");
+			mystrcpy(code,"999");
 		}
 		reader_build(code,battleStatus,sentence);
 		reader_close();
