@@ -14,7 +14,7 @@ int main() {
 	EnemyStat enemy;
 	LoadEnemy("MonsterDB.txt");
 	Enemy[1].ID = 1;
-	strcpy(Player.Nama,"chera");
+	mystrcpy(Player.Nama,"chera");
 	Player.LVL = 1;
 	Player.HP = 25;
 	Player.STR = 8;

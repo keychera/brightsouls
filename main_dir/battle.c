@@ -164,7 +164,7 @@ void battle_display(int simulatePass){
 	int display_size = ((name_size + 5*(sub_size)) + 12) ;
 	int i,j; //for intense looping right here
 	int spaces;
-	system("cls"); //somehow clrscr() doesn't work here
+	clear();
 	//upperline
 		printf(" ");
 		for(i = 1;i <= display_size-2;i++) printf("_");

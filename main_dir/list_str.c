@@ -2,7 +2,7 @@
 #include "header_dir/list_str.h"
 
 /* Prototype manajemen memori */
-void Alokasi (address *P, infotype X)
+void Alokasi (address *P, infotypestr X)
 /* I.S. Sembarang */
 /* F.S. Alamat P dialokasi, jika berhasil maka Info(P)=X dan 
         Next(P)=Nil */

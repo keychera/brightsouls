@@ -5,6 +5,12 @@
   * Enemy action display problem after round 1
 
 * **Commit Changelog Details:**
+  * "Merge deletestringh and master" 
+     - string.h is replaced by mystring.h
+     - queuelist is temporarily removed
+     - resolved merge conflict
+     - resolved issue on getting external string that ends with '\r'
+     - clearscreen with "clear()" command, defined in brightsoul.h
   * "Added enemy conclude" <78ce3c4>
      - Battle_outcome has return value now
      - Added player status calculation
@@ -20,5 +26,5 @@
  
 * **Compiling Command:**
 ```bash
-	gcc battle.c brightsoul.c lilfx.c list_str.c mesinkar.c mesinkata.c queuelist.c stacklist.c reader.c narrate.c monsterdb.c -o atest
+	gcc battle.c brightsoul.c lilfx.c list_str.c mesinkar.c mesinkata.c stacklist.c reader.c narrate.c monsterdb.c mystring.c -o atest
 ```
