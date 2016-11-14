@@ -8,3 +8,4 @@ fva test 7
 fvb test 8
 fvf test9
 stl <p> is as strong as <m> tho
+ggg <m> tries to flank but <p> attacks from front! <m> -<dmg> HP

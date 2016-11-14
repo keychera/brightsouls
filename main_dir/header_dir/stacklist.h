@@ -1,3 +1,4 @@
+
 /* File : stacklist.h */
 #ifndef _STACKLIST_H
 #define _STACKLIST_H
@@ -21,13 +22,13 @@ boolean IsSEmpty (Stack S);
 void CreateEmptyS (Stack * S);
 /* I.S. sembarang */ 
 /* F.S. Membuat sebuah stack S yang kosong */
-void Push (Stack * S, infotype X);
+void Push (Stack * S, infotypestr X);
 /* Menambahkan X sebagai elemen Stack S */
 /* I.S. S mungkin kosong, X terdefinisi */
 /* F.S. X menjadi TOP yang baru jika alokasi X berhasil, */
 /*      jika tidak, S tetap */
 /* Pada dasarnya adalah operasi Insert First pada list linier */
-void Pop (Stack * S, infotype X);
+void Pop (Stack * S, infotypestr X);
 /* Menghapus X dari Stack S. */
 /* I.S. S tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, */

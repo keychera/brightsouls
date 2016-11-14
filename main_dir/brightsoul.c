@@ -5,7 +5,7 @@
 #include "header_dir/battle.h"
 #include "header_dir/brightsoul.h"
 #include "header_dir/monsterdb.h"
-#include <string.h>
+#include "header_dir/mystring.h"
 #include <stdio.h>
 
 int main() {

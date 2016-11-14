@@ -1,6 +1,6 @@
 #include "header_dir/reader.h"
 #include <stdio.h>
-#include <string.h>
+#include "header_dir/mystring.h"
 
 //file var for reader.c
 static FILE * source;
@@ -19,12 +19,12 @@ void reader_checkID(char* sentence,char* outp)
 {
 	char* s;
 	int i = 0;
-	for ( s=&sentence[0]; (*s != ' ') && (*s != '\0'); s++ )
+	for ( s=&sentence[0]; (*s != ' ') && (*s != '\000'); s++ )
     {
 		outp[i] = *s;
 		i++;
     }
-	outp[i] = '\0';
+	outp[i] = '\000';
 }
 
 void reader_searchID(char* id,char* outp){
@@ -35,13 +35,13 @@ void reader_searchID(char* id,char* outp){
 	char idcheck[idlength];
 	while ((!found) && (fgets(sentence,strlength,source) != NULL)){
 		reader_checkID(sentence,idcheck);
-		found = !strcmp(idcheck,id);
+		found = !mystrcmp(idcheck,id);
 	}
 	if (found) {
 		boolean firstspace = false;
 		char* s;
 		int i = 0;
-		for ( s=&sentence[0]; (*s != '\0'); s++ )
+		for ( s=&sentence[0]; (*s != '\000'); s++ )
 		{		
 			if (firstspace) {
 				outp[i] = *s;
@@ -49,7 +49,7 @@ void reader_searchID(char* id,char* outp){
 			} else
 				firstspace = (*s == ' ');
 		}
-		outp[i] = '\0';
+		outp[i] = '\000';
 		rewind(source);
 	} else {
 		outp = NULL;
@@ -66,7 +66,7 @@ void reader_build(char* id,char** battleStatus,char* outp){
 		char special[idlength];
 		int i = 0;
 		int o = 0;
-		for ( s=&sentence[0];(*s != '\0'); s++ )
+		for ( s=&sentence[0];(*s != '\000'); s++ )
 		{	
 			if ((*s != '<') && (!checkingSpecial)) {
 				outp[o] = *s;
@@ -80,15 +80,15 @@ void reader_build(char* id,char** battleStatus,char* outp){
 					}
 				} else {
 					checkingSpecial = false;
-					special[i] = '\0';
+					special[i] = '\000';
 					i = 0;
 					reader_specialChar(special,battleStatus,outp,&o);
 				}
 			}
 		}	
-		outp[o] = '\0';
-		if (outp[o-1] == '\n') {
-			outp[o-1] = '\0';
+		outp[o-1] = '\000';
+		if ((outp[o-2] == '\n')||(outp[o-2] == '\r')) {
+			outp[o-2] = '\000';
 		}
 	} else {
 		outp = NULL;
@@ -103,22 +103,22 @@ void reader_specialChar(char* special,char** battleStatus,char* outp,int *newLen
 	
 	char* s;
 	int i = *newLength;
-	if (strcmp(special,"p") == 0) {
-		for ( s=&player_name[0]; (*s != '\0'); s++ )
+	if (mystrcmp(special,"p") == 0) {
+		for ( s=&player_name[0]; (*s != '\000'); s++ )
 		{
 			outp[i] = *s;
 			i++;
 		}
 	} else {
-		if (strcmp(special,"m") == 0) {
-			for ( s=&enemy_name[0]; (*s != '\0'); s++ )
+		if (mystrcmp(special,"m") == 0) {
+			for ( s=&enemy_name[0]; (*s != '\000'); s++ )
 			{
 				outp[i] = *s;
 				i++;
 			}
 		} else {
-			if (strcmp(special,"dmg") == 0) {
-				for ( s=&damage[0]; (*s != '\0'); s++ )
+			if (mystrcmp(special,"dmg") == 0) {
+				for ( s=&damage[0]; (*s != '\000'); s++ )
 				{
 					outp[i] = *s;
 					i++;

@@ -15,7 +15,7 @@ void CreateEmptyS (Stack * S)
 {
 	Top(*S) = Nil;
 }
-void Push (Stack * S, infotype X)
+void Push (Stack * S, infotypestr X)
 /* Menambahkan X sebagai elemen Stack S */
 /* I.S. S mungkin kosong, X terdefinisi */
 /* F.S. X menjadi TOP yang baru jika alokasi X berhasil, */
@@ -33,7 +33,7 @@ void Push (Stack * S, infotype X)
 		}
 	}
 }
-void Pop (Stack * S, infotype X)
+void Pop (Stack * S, infotypestr X)
 /* Menghapus X dari Stack S. */
 /* I.S. S tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, */
