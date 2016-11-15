@@ -10,8 +10,8 @@ void Alokasi (address *P, infotypestr X)
 {
 	*P = malloc(sizeof(*P));
 	if (*P != Nil) {
-		Info(*P) = X;
-		Next(*P) = Nil;
+		InfoLstr(*P) = X;
+		NextLstr(*P) = Nil;
 	}
 }
 void Dealokasi (address  P)

@@ -15,7 +15,7 @@ void IgnoreBlank()
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 {
-    while ((CC == BLANK) && (CC != MARK)) {
+    while (((CC == BLANK) || (CC == ENTER)) && (CC != MARK)) {
         ADV();
     }
 }
@@ -26,19 +26,25 @@ void STARTKATA(char File[])
           atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 {
+    EndKata = false;
+    EndFile = false;
     START(File);
     IgnoreBlank();
 	if (CC != ENDMARK) {
+		if (EndKata) {
+            ADV();
+            EndKata = false;
+        }
 		if (CC == MARK) {
 		    EndKata = true;
 		}
 		else {
-		    EndKata = false;
+			EndKata = false;
 		    SalinKata();
 			IgnoreBlank();
 		}
 	} else {
-		EndFile = true;	
+		EndFile = true;
 	}
 }
 
@@ -51,6 +57,11 @@ void ADVKATA()
 {
 	IgnoreBlank();
 	if (CC != ENDMARK) {
+        if (EndKata) {
+            ADV();
+            IgnoreBlank();
+            EndKata = false;
+        }
 		if (CC == MARK) {
 		    EndKata = true;
 		}
@@ -60,7 +71,7 @@ void ADVKATA()
 			IgnoreBlank();
 		}
 	} else {
-		EndFile = true;	
+		EndFile = true;
 	}
 }
 
@@ -78,10 +89,10 @@ void SalinKata()
             CKata.TabKata[i] = CC;
         }
         ADV();
-        if ((CC != MARK) && (CC != BLANK)) {
+        if ((CC != MARK) && (CC != BLANK) && (CC != ENTER) && (CC != ENDMARK)) {
             i++;
         }
-    } while ((CC != MARK) && (CC != BLANK));
+    } while ((CC != MARK) && (CC != BLANK) && (CC != ENTER) && (CC != ENDMARK));
     if (i > NMax) {
         i = NMax;
     }
@@ -94,7 +105,12 @@ int KataToInteger(Kata K)
     int i = 1;
     int sum = 0;
     boolean valid = true;
+    boolean minus = false;
     char c;
+    if ((K.Length > 0) && (K.TabKata[1] == '-')) {
+        minus = true;
+        i++;
+    }
     while ((i <= K.Length) && (valid)) {
         c = K.TabKata[i];
         if ((c == '0') || (c == '1') || (c == '2') || (c == '3') || (c == '4') || (c == '5') || (c == '6') || (c == '7') || (c == '8') || (c == '9')) {
@@ -106,6 +122,9 @@ int KataToInteger(Kata K)
         }
     }
     if (valid) {
+        if (minus) {
+            sum *= -1;
+        }
         return sum;
     }
     else {
@@ -114,10 +133,56 @@ int KataToInteger(Kata K)
 }
 
 void KataToString(Kata K, char * c){
-//WARNING!! STRING STARTING INDEX AT 0	
+//WARNING!! STRING STARTING INDEX AT 0
 	int i = 1;
 	while (i <= K.Length){
 		c[i-1] = K.TabKata[i];
 		i++;
 	}
+}
+
+void PrintKata(Kata K)
+// Prosedur untuk print kata
+{
+    int i;
+    for (i=1; i<=K.Length; i++) {
+        printf("%c",K.TabKata[i]);
+    }
+}
+
+Kata InputKata()
+// Fugsi untuk menerima input dari pengguna
+{
+    Kata input;
+    char c;
+    int i = 0;
+    do {
+        scanf("%c",&c);
+        if (c != '\n') {
+            i++;
+            input.TabKata[i] = c;
+        }
+    } while (c != '\n');
+    input.Length = i;
+    return input;
+}
+
+boolean IsKataSama (Kata K1, Kata K2)
+// Mengecek apakah K1 dan K2 sama
+{
+    boolean sama;
+    int i;
+    if (K1.Length != K2.Length) {
+        return false;
+    }
+    else {
+        sama = true;
+        for (i=1; i<=K1.Length; i++) {
+            if (K1.TabKata[i] != K2.TabKata[i]) {
+                sama = false;
+                break;
+            }
+        }
+        return sama;
+    }
 }

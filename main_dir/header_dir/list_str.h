@@ -16,8 +16,8 @@ typedef struct tElmt {
 	address Next;
 } Elmt; 
 
-#define Next(P) (P)->Next
-#define Info(P) (P)->Info
+#define NextLstr(P) (P)->Next
+#define InfoLstr(P) (P)->Info
 
 /* Prototype manajemen memori */
 void Alokasi (address *P, infotypestr X);

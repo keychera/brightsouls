@@ -2,6 +2,7 @@
 #include "header_dir/stacklist.h"
 #include <stdio.h>
 
+//PREFIX Lstr
 
 /* ********* PROTOTYPE REPRESENTASI LOJIK STACK ***************/
 boolean IsSEmpty (Stack S)
@@ -9,7 +10,7 @@ boolean IsSEmpty (Stack S)
 {
 	return (Top(S) == Nil);
 }
-void CreateEmptyS (Stack * S)
+void CreateEmptyStack (Stack * S)
 /* I.S. sembarang */ 
 /* F.S. Membuat sebuah stack S yang kosong */
 {
@@ -28,7 +29,7 @@ void Push (Stack * S, infotypestr X)
 		if (IsSEmpty(*S)) {
 			Top(*S) = P;
 		} else {
-			Next(P) = Top(*S);
+			NextLstr(P) = Top(*S);
 			Top(*S) = P;
 		}
 	}
@@ -41,12 +42,12 @@ void Pop (Stack * S, infotypestr X)
 /* Pada dasarnya adalah operasi Delete First pada list linier */
 {
 	X = InfoTop(*S);
-	if (Next(Top(*S)) == Nil) {
+	if (NextLstr(Top(*S)) == Nil) {
 		Dealokasi(Top(*S));
-		CreateEmptyS(&*S);
+		CreateEmptyStack(&*S);
 	} else {
 		address Pdel = Top(*S);
-		Top(*S) = Next(Top(*S));
+		Top(*S) = NextLstr(Top(*S));
 		Dealokasi(Pdel);
 	}
 

@@ -9,6 +9,7 @@
 
 #define NMax 50
 #define BLANK ' '
+#define ENTER '\n'
 
 typedef struct {
 	char TabKata[NMax+1]; /* container penyimpan kata, indeks yang dipakai [1..NMax] */
@@ -52,5 +53,13 @@ int KataToInteger(Kata K);
 void KataToString(Kata K, char * c);
 // Menghasilkan string dari kata
 
-#endif
+void PrintKata(Kata K);
+// Prosedur untuk print kata
 
+Kata InputKata();
+// Fugsi untuk menerima input dari pengguna
+
+boolean IsKataSama (Kata K1, Kata K2);
+// Mengecek apakah K1 dan K2 sama
+
+#endif

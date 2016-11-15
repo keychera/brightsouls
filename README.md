@@ -27,5 +27,5 @@
  
 * **Compiling Command:**
 ```bash
-	gcc battle.c brightsoul.c lilfx.c list_str.c mesinkar.c mesinkata.c stacklist.c reader.c narrate.c monsterdb.c mystring.c -o atest
+	gcc battle.c brightsoul.c lilfx.c list_str.c mesinkar.c mesinkata.c stacklist.c reader.c narrate.c monsterdb.c mystring.c tree.c skill.c listskill.c -o atest
 ```

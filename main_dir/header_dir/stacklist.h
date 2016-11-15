@@ -19,7 +19,7 @@ typedef struct {
 /* ********* PROTOTYPE REPRESENTASI LOJIK STACK ***************/
 boolean IsSEmpty (Stack S);
 /* Mengirim true jika Stack kosong: TOP(S) = Nil */
-void CreateEmptyS (Stack * S);
+void CreateEmptyStack (Stack * S);
 /* I.S. sembarang */ 
 /* F.S. Membuat sebuah stack S yang kosong */
 void Push (Stack * S, infotypestr X);

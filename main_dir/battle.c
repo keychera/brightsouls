@@ -116,7 +116,7 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 	enemy_str = curEnemy.STR;
 	enemy_def = curEnemy.DEF;
 	enemy_reward = curEnemy.EXP;
-	CreateEmptyS(&enemy_actions);
+	CreateEmptyStack(&enemy_actions);
 	for (i = 0; i < 10; i++)
 	{
 		j = 0;
@@ -429,7 +429,7 @@ void battle_calculateImpact(int* outcome){
 void battle_narrate(char narrateType,int outcome){
 //for narration
 	if (narrateType == 'b') {
-		reader_openFile("header_dir/battle_narration.txt");
+		reader_openFile("data_dir/battle_narration.txt");
 		char* battleStatus[5]; 	//passing reference for reader_build 
 								//where 0 : player name 1 : enemy name 2 : damageDone
 		battleStatus[0] = player_name;
