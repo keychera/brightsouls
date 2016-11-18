@@ -34,14 +34,14 @@ void Push (Stack * S, infotypestr X)
 		}
 	}
 }
-void Pop (Stack * S, infotypestr X)
+void Pop (Stack * S, infotypestr *X) //key fix for issue #4
 /* Menghapus X dari Stack S. */
 /* I.S. S tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, */
 /*      elemen TOP yang lama didealokasi */
 /* Pada dasarnya adalah operasi Delete First pada list linier */
 {
-	X = InfoTop(*S);
+	*X = InfoTop(*S); //key fix for issue #4
 	if (NextLstr(Top(*S)) == Nil) {
 		Dealokasi(Top(*S));
 		CreateEmptyStack(&*S);

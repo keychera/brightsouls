@@ -108,7 +108,6 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
 	int i,j,k,r[10];
-	char s[actionNumber+1];
 	EnemyStat curEnemy;
 	curEnemy = GetEnemy(monsterID, monsterLVL); //Second argument is LVL
 	mystrcpy(enemy_name,curEnemy.Nama); 
@@ -119,6 +118,7 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 	CreateEmptyStack(&enemy_actions);
 	for (i = 0; i < 10; i++)
 	{
+		char *s = (char *) malloc(actionNumber + 1); //key fix for issue #4
 		j = 0;
 		srand(time(NULL));
 		r[i] = rand() % 10;
@@ -143,8 +143,8 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 
 void battle_engage(){
 //readying enemy and player current action, setting rounds, <additional : setting narratives>
-	char currentAct[actionNumber+1];
-	Pop(&enemy_actions,currentAct);
+	char *currentAct = (char *) malloc(actionNumber + 1); //key fix for issue #4
+	Pop(&enemy_actions,&currentAct); //key fix for issue #4
 	int i;
 	for(i = 1;i <= actionNumber;i++){
 		current_action[i] = currentAct[i];
