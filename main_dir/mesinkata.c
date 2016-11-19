@@ -15,7 +15,7 @@ void IgnoreBlank()
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 {
-    while (((CC == BLANK) || (CC == ENTER)) && (CC != MARK)) {
+    while (((CC == BLANK) || (CC == ENTER) || (CC == ENTER2)) && (CC != MARK)) {
         ADV();
     }
 }
@@ -56,12 +56,12 @@ void ADVKATA()
    Proses : Akuisisi kata menggunakan procedure SalinKata */
 {
 	IgnoreBlank();
+    if (EndKata) {
+        ADV();
+        IgnoreBlank();
+        EndKata = false;
+    }
 	if (CC != ENDMARK) {
-        if (EndKata) {
-            ADV();
-            IgnoreBlank();
-            EndKata = false;
-        }
 		if (CC == MARK) {
 		    EndKata = true;
 		}
@@ -89,10 +89,10 @@ void SalinKata()
             CKata.TabKata[i] = CC;
         }
         ADV();
-        if ((CC != MARK) && (CC != BLANK) && (CC != ENTER) && (CC != ENDMARK)) {
+        if ((CC != MARK) && (CC != BLANK) && (CC != ENTER) && (CC != ENTER2) && (CC != ENDMARK)) {
             i++;
         }
-    } while ((CC != MARK) && (CC != BLANK) && (CC != ENTER) && (CC != ENDMARK));
+    } while ((CC != MARK) && (CC != BLANK) && (CC != ENTER) && (CC != ENTER2) && (CC != ENDMARK));
     if (i > NMax) {
         i = NMax;
     }
