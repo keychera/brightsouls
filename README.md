@@ -1,10 +1,21 @@
 # ![alt tag](https://cloud.githubusercontent.com/assets/23205405/20060403/97729e1a-a52d-11e6-922b-a879f2b7212a.jpg)
 ##**FOR BRIGHTER (TUBES) FUTURE**
 
-* **Known Issues**
-  * Enemy action display problem after round 1
+* **Instructions**
+  * Map navigation
+  * Skill navigation
+  * Battle system
 
 * **Commit Changelog Details:**
+ * "COMBINED SKILL + MAP + BATTLE! the gameplay is visible now + cleanup" + "Fixing skill issue" <f908f46> <2901768>
+     - SKILL , MAP, BATTLE
+     - add -lm on compiling command for math.h
+     - no issue so far
+     - **NOTICE** ON INCOMPLETE FEATURE BELOW
+     - enemy id passing to battle module is not handled
+     - player stat is not handled
+     - spawnenemy,mainmenu,and other thing I probably miss is not combined
+
  * " fixing issue #4, changes on stacklist and battle_enemyLoad " + "Queue rep for player actions and stacklist not using list_str anymore" <70a821e> <6cb80da>
      - issue caused by pointer inconsistency in stacklist is solved
      - battle_enemyLoad and battle_displayAction work properly now
