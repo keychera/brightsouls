@@ -19,7 +19,7 @@
 	int battle_round;
 	boolean battle_ongoing;
 	int game_state; // 1 for input, 3 for battle simulation
-	char player_action[actionNumber + 1]; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
+	Queue player_action; // change to Queue, size declaration in battle_engage // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
 	char current_action[actionNumber + 1]; // + 1 because we're not using idx 0
 	int damageDone;
 //narrative variable
@@ -144,13 +144,14 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 void battle_engage(){
 //readying enemy and player current action, setting rounds, <additional : setting narratives>
 	char *currentAct = (char *) malloc(actionNumber + 1); //key fix for issue #4
+	CreateEmptyQueue(&player_action,actionNumber + 1); //Queue rep for player_action
 	Pop(&enemy_actions,&currentAct); //key fix for issue #4
 	int i;
 	for(i = 1;i <= actionNumber;i++){
 		current_action[i] = currentAct[i];
 	}
-	for(i = 1;i <= actionNumber;i++){
-		player_action[i] = '_';
+	for(i = 1;i <= actionNumber+1;i++){ //Queue rep for player_action, 5 times as we accessed like the way array accessed, from the second element
+		Add(&player_action,'_'); //Queue rep for player_action
 	}
 	battle_showAction(current_action);
 	battle_round++;
@@ -301,7 +302,7 @@ void battle_display(int simulatePass){
 		//action
 			printf("|");
 			for(i = 1;i <= actionNumber;i++) {
-				printf("%c ",player_action[i]);
+				printf("%c ",player_action.T[player_action.HEAD + i]); //Queue rep for player_action
 			}
 			for(i = 1;i <= (sub_size * 5);i++) printf(" ");
 			printf("|");
@@ -340,12 +341,12 @@ void battle_input(){
 			scanf(" %c",&inp);
 			if (inp == 'E') {
 				if (i != 1) {
-					player_action[i-1] = '_';
+					player_action.T[player_action.HEAD + i - 1] = '_'; //Queue rep for player_action
 					i--;
 				}
 			} else {
 				//assumption : the input is always correct
-				player_action[i] = inp;
+				player_action.T[player_action.HEAD + i] = inp; //Queue rep for player_action
 				i++;
 				if (i == 5) {
 					narrate_narrativeDel(&narratives);
@@ -356,8 +357,8 @@ void battle_input(){
 		} else {
 			scanf(" %c",&inp);
 			if (inp == 'E') {
-				player_action[i-1] = '_';
-				i--;
+				player_action.T[player_action.HEAD + i - 1] = '_'; //Queue rep for player_action
+				i--; 
 				narrate_narrativeDel(&narratives);
 				narrate_narrativeAdd(&narratives,"Please input your action");
 			} else {
@@ -377,7 +378,7 @@ void battle_simulate(){
 	game_state = 3;
 	int i,round_outcome;
 	for(i = 1;i <= 4;i++) {
-		round_outcome = battle_compareAct(player_action[i],current_action[i]);
+		round_outcome = battle_compareAct(player_action.T[player_action.HEAD + i],current_action[i]); //Queue rep for player_action
 		//battle_calculatePassive();
 		battle_calculateImpact(&round_outcome);
 		battle_narrate('b',round_outcome);

@@ -5,6 +5,7 @@
 #include "mystring.h"
 #include "boolean.h"
 #include "stacklist.h"
+#include "queue.h"
 //#include "queuelist.h" later after merge
 #include "reader.h"
 #include "narrate.h"
@@ -24,7 +25,7 @@
 	extern int battle_round;
 	extern boolean battle_ongoing;
 	extern int game_state; // 1 for input, 2 for battle simulation
-	extern char player_action[actionNumber + 1]; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
+	extern Queue player_action; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
 	extern char current_action[actionNumber + 1]; // + 1 because we're not using idx 0
 	extern int damageDone;
 //narrative variable
