@@ -5,6 +5,15 @@
   * Enemy action display problem after round 1
 
 * **Commit Changelog Details:**
+ * " fixing issue #4, changes on stacklist and battle_enemyLoad " + "Queue rep for player actions and stacklist not using list_str anymore" <70a821e> <6cb80da>
+     - issue caused by pointer inconsistency in stacklist is solved
+     - battle_enemyLoad and battle_displayAction work properly now
+     - Queue is back
+     - Stacklist and list_str is combined(again, I should've known that it's a bad idea!)
+     
+ * "Manual merging Skill and Battle feature and reorganize txt file " <a42e502>
+     - manually merging Skill feature by kevjo and this Battle feature to test compatibility
+     
   * "Merge deletestringh and master" + "further little fix" <f908f46> <2901768>
      - string.h is replaced by mystring.h
      - queuelist is temporarily removed
