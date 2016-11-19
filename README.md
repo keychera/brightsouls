@@ -14,6 +14,8 @@
      - **NOTICE** ON INCOMPLETE FEATURE BELOW
      - enemy id passing to battle module is not handled
      - player stat is not handled
+     - battle_outcome and its effect on map and skill is not handled
+     - probably unsync feature on level up handled by battle module and skillpoint increase by skill module
      - spawnenemy,mainmenu,and other thing I probably miss is not combined
 
  * " fixing issue #4, changes on stacklist and battle_enemyLoad " + "Queue rep for player actions and stacklist not using list_str anymore" <70a821e> <6cb80da>
