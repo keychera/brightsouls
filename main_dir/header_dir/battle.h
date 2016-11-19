@@ -26,12 +26,12 @@
 	extern boolean battle_ongoing;
 	extern int game_state; // 1 for input, 2 for battle simulation
 	extern Queue player_action; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
-	extern char current_action[actionNumber + 1]; // + 1 because we're not using idx 0
+	extern Queue current_action; // + 1 because we're not using idx 0 //key edit
 	extern int damageDone;
 //narrative variable
 	extern tNarrative narratives;
 //enemy show & close action array
-    extern char display_action[actionNumber + 1];
+    extern Queue display_action;
 
 //directives
 void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome);
@@ -60,7 +60,7 @@ void battle_narrate(char narrateType,int outcome);
 //for narration
 int battle_compareAct(char proponent,char opponent);
 //return the value to determine what outcome 
-void battle_showAction(char currentAct[]);
+void battle_showAction(Queue currentAct); //key edit
 //randomized which action is hidden
 int isBoss(int id);
 

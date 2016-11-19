@@ -305,16 +305,6 @@ void Move(POINT *P,float X, float Y){
 				// EnemyStat enemy; key edit - not used
 				LoadEnemy("data_dir/MonsterDB.txt");
 				Enemy[1].ID = 1; //handle this
-				//NOT COMPULSORY FOR BATTLE because nobody handle the global player var just yet
-				mystrcpy(Player.Nama,"chera");
-				Player.LVL = 1;
-				Player.HP = 25;
-				Player.STR = 8;
-				Player.DEF = 7;
-				Player.EXP = 0;
-				Player.maxHP = 25;
-				Player.maxEXP = 100;
-				//NOT COMPULSORY FOR BATTLE because nobody handle the global var just yet
 				battle_initiate(Enemy[1].ID, 1,&battle_outcome); //handle enemy id please
 				//do something with battle_outcome here, a message to Lazu
 				switch (battle_outcome) {

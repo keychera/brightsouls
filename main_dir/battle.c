@@ -20,12 +20,12 @@
 	boolean battle_ongoing;
 	int game_state; // 1 for input, 3 for battle simulation
 	Queue player_action; // change to Queue, size declaration in battle_engage // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
-	char current_action[actionNumber + 1]; // + 1 because we're not using idx 0
+	Queue current_action; // + 1 because we're not using idx 0 //key edit queue
 	int damageDone;
 //narrative variable
 	tNarrative narratives;
 //enemy show & close action array
-    char display_action[actionNumber + 1];
+    Queue display_action; //key edit Queue rep for spec
 
 //directives
 void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome) {
@@ -145,10 +145,12 @@ void battle_engage(){
 //readying enemy and player current action, setting rounds, <additional : setting narratives>
 	char *currentAct = (char *) malloc(actionNumber + 1); //key fix for issue #4
 	CreateEmptyQueue(&player_action,actionNumber + 1); //Queue rep for player_action
+	CreateEmptyQueue(&current_action,actionNumber + 1); //Queue rep for player_action
+	CreateEmptyQueue(&display_action,actionNumber + 1); //Queue rep for player_action
 	Pop(&enemy_actions,&currentAct); //key fix for issue #4
 	int i;
-	for(i = 1;i <= actionNumber;i++){
-		current_action[i] = currentAct[i];
+	for(i = 0;i <= actionNumber + 1;i++){ //key edit
+		Add(&current_action,currentAct[i]); //key edit
 	}
 	for(i = 1;i <= actionNumber+1;i++){ //Queue rep for player_action, 5 times as we accessed like the way array accessed, from the second element
 		Add(&player_action,'_'); //Queue rep for player_action
@@ -238,16 +240,16 @@ void battle_display(int simulatePass){
 			for(i = 1;i <= actionNumber;i++) {
 				switch (game_state) {
 					case 1 :for(i = 1;i <= actionNumber;i++) {
-								printf("%c ",display_action[i]);
+								printf("%c ",display_action.T[display_action.HEAD + i]);
 							}
 							for(i = 1;i <= (sub_size * 4) - 2;i++) printf(" ");
 							break;
 					case 3 :for(i = 1;i <= actionNumber;i++) {
 								if (i == simulatePass) printf(">");
 								if (i > simulatePass)
-									printf("%c ",display_action[i]);
+									printf("%c ",display_action.T[display_action.HEAD + i]);
 								else
-									printf("%c ",current_action[i]);
+									printf("%c ",current_action.T[current_action.HEAD + i]);
 							}
 							for(i = 1;i <= (sub_size * 4) - 3;i++) printf(" ");
 							break;
@@ -378,7 +380,7 @@ void battle_simulate(){
 	game_state = 3;
 	int i,round_outcome;
 	for(i = 1;i <= 4;i++) {
-		round_outcome = battle_compareAct(player_action.T[player_action.HEAD + i],current_action[i]); //Queue rep for player_action
+		round_outcome = battle_compareAct(player_action.T[player_action.HEAD + i],current_action.T[current_action.HEAD + i]); //Queue rep for player_action
 		//battle_calculatePassive();
 		battle_calculateImpact(&round_outcome);
 		battle_narrate('b',round_outcome);
@@ -506,7 +508,7 @@ int battle_compareAct(char proponent,char opponent){
 	return out;
 }
 
-void battle_showAction(char currentAct[]){
+void battle_showAction(Queue currentAct){
 //randomized which action is hidden
 //NOT IMPLEMENTED
 	int i,j,k;
@@ -518,11 +520,11 @@ void battle_showAction(char currentAct[]){
 
     for(i = 1; i <= actionNumber; i++)
     {
-        display_action[i] = currentAct[i];
+        display_action.T[display_action.HEAD + i] = currentAct.T[currentAct.HEAD + i];
     }
 
-    display_action[j] = '#';
-    display_action[k] = '#';
+    display_action.T[display_action.HEAD + j] = '#';
+    display_action.T[display_action.HEAD + k] = '#';
 }
 
 
