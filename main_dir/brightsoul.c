@@ -4,30 +4,27 @@
 //#include "tree.h"
 
 #include "header_dir/brightsoul.h"
+//map header
+#include "header_dir/map.h"
 //skill header
 #include "header_dir/skill.h"
-//battle header 
-#include "header_dir/battle.h"
-#include "header_dir/monsterdb.h"
+/*battle header, moved to map.c there is no calling this module here
+#include "header_dir/battle.h" 
+#include "header_dir/monsterdb.h"*/
 //general purpose
-#include "header_dir/mystring.h"
 #include <stdio.h>
 
 int main() {
     // start coding here
-    int inp;
-    printf("testing feature\n");
-    printf("1 : Skill \n2 : Battle \n99 : stop testing\n   >>");
-    scanf("%d",&inp);
-    while (inp != 99) {
-		switch (inp) {
-			case 1 :
-				ImportSkill();
-				ImportTree("data_dir/tree.txt",&Skill);
-				Player.Spoint = 15;
-				SkillMenu();
-					break;
-			case 2 :
+    InitGame(&BigMap);
+    ImportSkill();
+    Skill = ImportTree("data_dir/tree.txt");
+    Player.Spoint = 15;
+    Game(&BigMap);
+    
+   			
+	
+	/* battle testing, moved to map.c
 				;//because case 2 : is being an asshole
 				int battle_outcome;
 				EnemyStat enemy;
@@ -49,11 +46,6 @@ int main() {
 					default:
 						printf("apparently you found a bug!\n  this isn't supposed to be printed.\n");
 				}
-				break;
-			default:
-			printf("wrong input\n");
-		}
-		scanf(" %d",&inp);
-	}
+	*/
     return 0;
 }

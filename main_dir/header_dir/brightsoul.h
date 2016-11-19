@@ -6,10 +6,21 @@
 #define EMax 5
 
 //skill header
+#include "mystring.h"
 #include "listskill.h"
 #include "mesinkata.h"
+#include "map.h"
 #include "tree.h"
 
+//formatting purposes
+#define RED   "\x1B[31m"    //merah
+#define GRN   "\x1B[32m"    //hijau
+#define YEL   "\x1B[33m"    //kuning
+#define BLU   "\x1B[34m"    //biru
+#define MAG   "\x1B[35m"    //merah muda
+#define CYN   "\x1B[36m"    //biru muda
+#define WHT   "\x1B[37m"    //putih
+#define RESET "\x1B[0m"     //reset warna
 #define clear() printf("\033[H\033[J")
 
 typedef struct SkillStat {
@@ -37,16 +48,18 @@ typedef struct PlayerStat {
     ListSkill aqcuired;
 } PlayerStat;
 
+/* don't know why this here - key
 typedef struct CurMap {
     int ID;
     //MATRIKS Map;
-} CurMap;
+} CurMap;*/
 
 //DEKLARASI VARIABEL GLOBAL
 SkillStat DataSkill[SMax];
 PlayerStat Player;
 ELoc Enemy[EMax];
-CurMap Map;
+//CurMap Map;
+ListSubMap BigMap;
 Tree Skill;
 // PLACEHOLDER : <tipe_untuk_map_besar> BigMap;
 

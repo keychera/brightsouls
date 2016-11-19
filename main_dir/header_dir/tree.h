@@ -79,7 +79,7 @@ Tree CreateTree (infotree rootItem, infotree leftItem, infotree rightItem);
 Tree CombineTree (infotree rootItem, Tree leftTree, Tree rightTree);
 /* Fungsi mengembalikan sebuah tree T dengan Info(Root(T)) = rootItem, */
 /* Left(T) = Root(leftTree), Right(T) = Root(rightTree) */
-void ImportTree (char File[], Tree *T);
+Tree ImportTree (char File[]);
 /* Fungsi membentuk tree dari data yang ada di file eksternal */
 
 /************ PEMECAHAN TREE ************/

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "header_dir/tree.h" //key edit
-#include "header_dir/mesinkata.h" //key edit
+#include "header_dir/tree.h"
+#include "header_dir/mesinkata.h"
 
 boolean EndKata;
 Kata CKata;
@@ -137,23 +137,24 @@ Tree CombineTree (infotree rootItem, Tree leftTree, Tree rightTree)
     }
     return T;
 }
-void ImportTree (char File[], Tree *T)
+Tree ImportTree (char File[])
 /* Fungsi membentuk tree dari data yang ada di file eksternal */
 {
+    Tree T;
     addressT P;
     int temp;
     STARTKATA(File);
     temp = KataToInteger(CKata);
-    *T = AlokasiT(temp);
+    T = AlokasiT(temp);
     ADVKATA();
     temp = KataToInteger(CKata);
     if (temp != -1) {
-        Left(*T) = AlokasiT(temp);
+        Left(T) = AlokasiT(temp);
     }
     ADVKATA();
     temp = KataToInteger(CKata);
     if (temp != -1) {
-        Right(*T) = AlokasiT(temp);
+        Right(T) = AlokasiT(temp);
     }
     ADVKATA();
     while (!EndFile) {
@@ -162,7 +163,7 @@ void ImportTree (char File[], Tree *T)
         }
         else {
             temp = KataToInteger(CKata);
-            P = SearchT(*T,temp);
+            P = SearchT(T,temp);
             if (P != Nil) {
                 ADVKATA();
                 temp = KataToInteger(CKata);
@@ -182,6 +183,7 @@ void ImportTree (char File[], Tree *T)
             ADVKATA();
         }
     }
+    return T;
 }
 
 /************ PEMECAHAN TREE ************/

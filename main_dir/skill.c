@@ -1,13 +1,12 @@
 #include <string.h>
 #include <stdio.h>
-//#include <conio.h>  
-#include "header_dir/skill.h" //key edit
-#include "header_dir/brightsoul.h" //key edit
+#include "header_dir/skill.h"
+#include "header_dir/brightsoul.h"
 
 void ImportSkill()
 /* Prosedur untuk mengambil data skill dari file eksternal */
 {
-    char F[SMax] = "data_dir/dataskill.txt"; //key edit
+    char F[40] = "data_dir/dataskill.txt"; //key edit for compatibility
     int n = 1;
     int i;
     Kata hp;
@@ -77,18 +76,18 @@ void PrintSubTree(addressT P, int n, int a[])
     int i;
     for (i=1; i<n; i++) {
         if (i == n-1) {
-            printf("  |-");
+            printf(CYN"  |-"RESET);
         }
         else if (a[i] == 1) {
-            printf("  | ");
+            printf(CYN"  | "RESET);
         }
         else {
-            printf("    ");
+            printf(CYN"    "RESET);
         }
     }
     Cari = SearchS(Player.aqcuired,Info(P));
     if (Cari != Nil) {
-        printf("//** %2d. ",Info(P));
+        printf(GRN "%2d. ",Info(P));
         PrintKata(DataSkill[Info(P)].Nama);
         printf(" LEVEL : %d; ",Level(Cari));
         switch (DataSkill[Info(P)].Stat) {
@@ -105,10 +104,10 @@ void PrintSubTree(addressT P, int n, int a[])
                 break;
             }
         }
-        printf(" : +%d%% **//\n",DataSkill[Info(P)].Change*Level(Cari));
+        printf(" : +%d%%\n" RESET,DataSkill[Info(P)].Change*Level(Cari));
     }
     else {
-        printf("%2d. ",Info(P));
+        printf(RED "%2d. ",Info(P));
         PrintKata(DataSkill[Info(P)].Nama);
         printf(" (");
         switch (DataSkill[Info(P)].Stat) {
@@ -125,7 +124,7 @@ void PrintSubTree(addressT P, int n, int a[])
                 break;
             }
         }
-        printf(" : +%d%%)\n",DataSkill[Info(P)].Change);
+        printf(" : +%d%%)\n" RESET,DataSkill[Info(P)].Change);
     }
     //REKURSIF
     if ((Left(P) != Nil) && (Right(P) != Nil)) {
@@ -147,10 +146,11 @@ void PrintSubTree(addressT P, int n, int a[])
 void PrintSkill()
 /* Prosedur untuk menampilkan tampilan menu skill */
 {
-    printf("________________________________________________________\n");
-    printf("| SKILL TREE                                           |\n");
-    printf("| //** AQUIRED SKILL **//                              |\n");
-    printf("|______________________________________________________|\n");
+    clear();
+    printf(YEL "__________________________________________________________________\n");
+    printf("| SKILL TREE                                                     |\n");
+    printf("| "GRN"ACQUIRED       "RED"NOT ACQUIRED"YEL"                                    |\n");
+    printf("|________________________________________________________________|\n" RESET);
     int gambar[10];
     PrintSubTree(Skill,1,gambar);
     printf("SKILL POINTS : %d\n\n",Player.Spoint);
@@ -189,7 +189,7 @@ void LearnSkill()
             }
         }
         else {
-            printf("Skill already learnt \n");
+            printf("You have learned this skill, why bother?\n");
         }
         getchar();
     }
@@ -226,7 +226,7 @@ void UpgradeSkill()
             }
         }
         else {
-            printf("Skill not learnt yet\n");
+            printf("You have to learn this skill first\n");
         }
         getchar();
     }

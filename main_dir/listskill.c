@@ -6,7 +6,7 @@ Topik		: ListSkill linear
 Deskripsi	:
 */
 
-#include "header_dir/listskill.h" //key edit
+#include "header_dir/listskill.h"
 #include <stdio.h>
 #include <stdlib.h>
 
