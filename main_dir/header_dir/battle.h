@@ -36,7 +36,7 @@
 //directives
 void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome);
 //initiate the battle system, which consist of loading enemies, displaying battle interface, and simulate the battle process
-int battle_conclude();
+int battle_conclude(int roundMax);
 //battle_conlude return battle_outcome value
 void battle_lvlup();
 //Calculate LVL UP Status
@@ -59,7 +59,7 @@ void battle_calculateImpact(int *outcome);
 void battle_narrate(char narrateType,int outcome);
 //for narration
 int battle_compareAct(char proponent,char opponent);
-//return the value to determine what outcome 
+//return the value to determine what outcome
 void battle_showAction(Queue currentAct); //key edit
 //randomized which action is hidden
 int isBoss(int id);

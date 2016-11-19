@@ -35,7 +35,7 @@ battle_outcome value table
 	Lose 				= 2
 	Draw | Round Clear	= 3
 */
-//initiate the battle system, which consist of loading enemies, 
+//initiate the battle system, which consist of loading enemies,
 //displaying battle interface, and simulate the battle
 	int roundMax = isBoss(monsterID)? 20 : 10;
 	battle_ongoing = true;
@@ -47,49 +47,69 @@ battle_outcome value table
 		battle_input();
 		battle_simulate();
 		battle_ongoing = (battle_round <= roundMax);
-		*battle_outcome = battle_conclude();
+		*battle_outcome = battle_conclude(roundMax);
 	}
 }
 
-int battle_conclude(){
+int battle_conclude(int roundMax){
 //battle_conlude return battle_outcome value
-	if (player_hp > 0 && enemy_hp > 0) {
+    if (player_hp > 0 && enemy_hp > 0) {
 		Player.HP = player_hp;
+		if (battle_round == roundMax)
+        {
+            narrate_createEmpty(&narratives);
+            narrate_narrativeAdd(&narratives,"BATTLE DRAW!");
+            battle_display(0);
+        }
 		return 3;
 	}
 	else if (player_hp > 0 && enemy_hp <= 0)
 	{
+	    enemy_hp = 0;
+	    narrate_createEmpty(&narratives);
 		Player.HP = player_hp;
 		Player.EXP += enemy_reward;
+		narrate_narrativeAdd(&narratives,"You WIN!");
 		if (Player.EXP >= Player.maxEXP)
 		{
 			Player.EXP = Player.maxEXP - Player.EXP;
 			battle_lvlup();
 		}
+        battle_display(0);
+        while(getchar() != '\n');
 		battle_ongoing = false;
 		return 1;
 	}
 	else if (player_hp <= 0 && enemy_hp > 0)
 	{
 		Player.HP = 0;
+		narrate_createEmpty(&narratives);
+		narrate_narrativeAdd(&narratives,"You LOSE!");
+        battle_display(0);
+        while(getchar() != '\n');
 		battle_ongoing = false;
 		return 2;
 	}
 }
 
 void battle_lvlup(){
-/* Player Level Up Calculation	
-	
+/* Player Level Up Calculation
+
 	HP 	= HP + (PlayerLVL%2 + 2) + (PlayerLVL%5/5)
 	STR = STR + (PlayerLVL%2 + 1) + (PlayerLVL%5/5)
 	DEF = DEF + (PlayerLVL%2 + 1)
 	EXP = EXP + (PlayerLVL*EXP/2)
 */
+    char st[20],s[6];
 	Player.LVL++;
+	Player.HP += (Player.LVL%2 + 2) + (Player.LVL%2/5);
+	Player.Spoint += 1;
 	Player.maxHP += (Player.LVL%2 + 2) + (Player.LVL%2/5);
 	Player.STR += (Player.LVL%2 + 1) + (Player.LVL%2/5);
 	Player.DEF += (Player.LVL%2 + 1);
 	Player.maxEXP += (Player.LVL*Player.maxEXP/2);
+	narrate_narrativeAdd(&narratives,"LEVEL UP!");
+	narrate_narrativeAdd(&narratives,"You got 1 Skill Point!");
 }
 
 void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int exp,int maxhp,int maxexp){
@@ -110,7 +130,7 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 	int i,j,k,r[10];
 	EnemyStat curEnemy;
 	curEnemy = GetEnemy(monsterID, monsterLVL); //Second argument is LVL
-	mystrcpy(enemy_name,curEnemy.Nama); 
+	mystrcpy(enemy_name,curEnemy.Nama);
 	enemy_hp = curEnemy.HP;
 	enemy_str = curEnemy.STR;
 	enemy_def = curEnemy.DEF;
@@ -126,11 +146,11 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 			if(r[i] != r[j])
 			{
 				j++;
-			} else 
+			} else
 			{
 				j = 0;
 				r[i] = rand() % 10;
-			}			
+			}
 		}
 		s[0] = ' ';
 		for (k = 1;k <= actionNumber;k++)
@@ -172,7 +192,7 @@ void battle_display(int simulatePass){
 		printf(" ");
 		for(i = 1;i <= display_size-2;i++) printf("_");
 		printf(" \n");
-	
+
 	//player stat
 		//name
 			printf("|");
@@ -207,7 +227,7 @@ void battle_display(int simulatePass){
 						break;
 					default :
 						spaces = 0;
-				}				
+				}
 				for(i = 1;i <= sub_size - spaces;i++) printf(" ");
 				printf("|");
 			}
@@ -221,7 +241,7 @@ void battle_display(int simulatePass){
 				printf("|");
 			}
 			printf("\n");
-		
+
 	//enemy stat
 		//name
 			printf("|");
@@ -268,7 +288,7 @@ void battle_display(int simulatePass){
 			for(i = 1;i <= (sub_size * 4) + 6;i++) printf("_");
 			printf("|");
 			printf("\n");
-	
+
 	//narratives element
 		//upper margin
 			printf("|");
@@ -294,7 +314,7 @@ void battle_display(int simulatePass){
 			printf("|");
 			for(i = 1;i <= display_size-2;i++) printf("_");
 			printf("|\n");
-	
+
 	//player's current action
 		//interface
 			printf("|");
@@ -316,7 +336,7 @@ void battle_display(int simulatePass){
 			for(i = 1;i <= (sub_size * 5) + 8;i++) printf("_");
 			printf("|");
 			printf("\n");
-		
+
 	//user interface
 		switch (game_state) {
 			case 1	:
@@ -326,7 +346,7 @@ void battle_display(int simulatePass){
 			default :
 				printf("something wrong with the game state\n");
 		}
-			
+
 }
 
 void battle_input(){
@@ -360,7 +380,7 @@ void battle_input(){
 			scanf(" %c",&inp);
 			if (inp == 'E') {
 				player_action.T[player_action.HEAD + i - 1] = '_'; //Queue rep for player_action
-				i--; 
+				i--;
 				narrate_narrativeDel(&narratives);
 				narrate_narrativeAdd(&narratives,"Please input your action");
 			} else {
@@ -368,9 +388,9 @@ void battle_input(){
 			}
 			battle_display(0);
 		}
-		
+
 	}
-	
+
 }
 
 void battle_simulate(){
@@ -433,7 +453,7 @@ void battle_narrate(char narrateType,int outcome){
 //for narration
 	if (narrateType == 'b') {
 		reader_openFile("data_dir/battle_narration.txt");
-		char* battleStatus[5]; 	//passing reference for reader_build 
+		char* battleStatus[5]; 	//passing reference for reader_build
 								//where 0 : player name 1 : enemy name 2 : damageDone
 		battleStatus[0] = player_name;
 		battleStatus[1] = enemy_name;
@@ -466,7 +486,7 @@ void battle_narrate(char narrateType,int outcome){
 }
 
 int battle_compareAct(char proponent,char opponent){
-//return the value to determine what outcome, return 0 if the outcome is undefined 
+//return the value to determine what outcome, return 0 if the outcome is undefined
 /* return val mapping
 	p	o	outcome						value	affects
 	A	A	will dmg if higher str		1		depends
@@ -478,7 +498,7 @@ int battle_compareAct(char proponent,char opponent){
 	F	A	o attacked p				7		player
 		B	p flanked o					8		enemy
 		F	will dmg if higher str		9		depends
-	
+
 */
 	int out = 0;
 	switch (proponent) {
