@@ -56,12 +56,13 @@ void ADVKATA()
    Proses : Akuisisi kata menggunakan procedure SalinKata */
 {
 	IgnoreBlank();
+	if (CC != ENDMARK) { //moved here
     if (EndKata) {
         ADV();
         IgnoreBlank();
         EndKata = false;
     }
-	if (CC != ENDMARK) {
+	//if (CC != ENDMARK) { fix - moved upwards - it is perceived wrong because it differs from original
 		if (CC == MARK) {
 		    EndKata = true;
 		}
