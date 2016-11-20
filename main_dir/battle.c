@@ -53,6 +53,7 @@ battle_outcome value table
 
 int battle_conclude(int roundMax){
 //battle_conlude return battle_outcome value
+	game_state = 5;
     if (player_hp > 0 && enemy_hp > 0) {
 		Player.HP = player_hp;
 		if (battle_round == roundMax)
@@ -273,6 +274,11 @@ void battle_display(int simulatePass){
 							}
 							for(i = 1;i <= (sub_size * 4) - 3;i++) printf(" ");
 							break;
+					case 5 :for(i = 1;i <= actionNumber;i++) {
+								printf("%c ",current_action.T[current_action.HEAD + i]);
+							}
+							for(i = 1;i <= (sub_size * 4) - 2;i++) printf(" ");
+							break;
 					//default:
 				}
 			}
@@ -342,6 +348,9 @@ void battle_display(int simulatePass){
 			case 1	:
 			case 3	:
 				printf("    input here >> ");
+				break;
+			case 5 	:
+				printf("    press enter to continue");
 				break;
 			default :
 				printf("something wrong with the game state\n");
