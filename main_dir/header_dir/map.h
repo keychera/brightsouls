@@ -5,13 +5,13 @@
 #include <stdio.h>
 #include "brightsoul.h" //key edit for compatibility
 #include "boolean.h"
-#include "point.h"
-#include <string.h>
+#include "mypoint.h"
+#include "mystring.h"
+#include "matriks.h"
+#include "spawnenemy.h"
+#include "mesinkata.h"
 
 #define Nil NULL
-
-#define HSizeMap 10
-#define WSizeMap 10
 
 /* moved to brightsoul.h for more global usage key edit
 #define RED   "\x1B[31m"    //merah
@@ -26,7 +26,6 @@
 */
 //#define FileMap "../data_dir/map.txt" //key edit for compatibility - nope not working this way - moved to map.c
 
-char CurMap[HSizeMap][WSizeMap];
 
 typedef struct tElmtlistTele *addressTele;
 typedef struct tElmtlistSubMap *addressSubMap;
@@ -52,6 +51,12 @@ typedef struct {
 	addressSubMap First;
 } ListSubMap;
 
+/*GLOBAL VARIABLE*/
+MATRIKS CurMap;
+addressSubMap CurSubMap;
+POINT PlayerPos;
+ListSubMap LMap;
+
 /*Selektor*/
 #define From(P) (P)->From
 #define To(P) (P)->To
@@ -66,6 +71,12 @@ typedef struct {
 
 void PrintInfoSubMap(ListSubMap L);
 /*Memprint informasi Elemen pada List SubMap L. Untuk debugging*/
+
+boolean IsEmptySubMap(ListSubMap L);
+/*Menentukan apakah list submap kosong*/
+
+void CreateEmptySubMap(ListSubMap *L);
+/*Menghasilkan ListSubmap kosong*/
 
 addressSubMap AlokasiSubMap (infotypeSubMap X);
 /*Memesan alamat dalam memori untuk sebuah elemen list submap dengan
@@ -125,20 +136,27 @@ char IntToChar(int X);
 void ImportCurMap(infotypeSubMap X);
 /*Mengimpor map dengan id X dan memasukannya ke dalam CurMap*/
 
-void PrintCurMap(POINT Player);
+void PrintCurMap();
 /*Memprint isi dari CurMap. Player ada pada korrdinatnya*/
 
-void Move(POINT *P,float X, float Y);
+void Move(float X, float Y);
 /*Memindahkan koordinat player sejauh X,Y. jika ada dinding atau batas
 terluar peta, tidak jadi pindah*/
 
-void InitGame(ListSubMap *L);
-/*Menginisialisasi game. Jalankan sebelum prosedur game*/
+void SaveMap();
+/*Menyimpan Lokasi player dan kondisi Map (List Submap beserta List
+Telenya) ke file external FileSaveMap*/
 
-void Game(ListSubMap *L);
-/*I.S. Game sudah di inisialisasi*/
-/*Mengimpor map dari file eksternal dan menampilkan game dalam mode peta.
-saat ini tidak ada cara untuk keluar dari mode peta karena loop infinite*/
+void LoadPre();
+/*Menampilkan isi file external FileSaveMap(Untuk Debugging)*/
+
+void Load(boolean Default);
+/*Mengimpor Lokasi player dan kondisi map dari file external FileSaveMap
+*/
+
+void Game();
+/*Mengimpor map dari file eksternal Default dan menampilkan game dalam 
+mode peta.Akan keluar jika pengguna memasukan EXIT*/
 
 
 #endif

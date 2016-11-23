@@ -75,7 +75,7 @@ int main() {
 				Player.maxHP = 25;
 				Player.maxEXP = 100;
 				//initiate map
-				InitGame(&BigMap);
+				Load(false); //not sure with the parameter - key
 				ImportSkill();
 				Skill = ImportTree("data_dir/tree.txt");
 				Player.Spoint = 15;

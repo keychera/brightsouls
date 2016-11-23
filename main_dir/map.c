@@ -6,6 +6,8 @@
 #include "header_dir/monsterdb.h"
 
 #define FileMap "data_dir/map.txt"
+#define FileMapSave "data_dir/mapsave.txt"
+#define FileMapSaveDefault "data_dir/DefaultMap.txt"
 
 /*********************/
 /*****LIST SUBMAP*****/
@@ -205,9 +207,9 @@ void ConnectSubMap(ListSubMap *L, infotypeSubMap X1,POINT C1 ,infotypeSubMap X2,
 void CreateEmptyCurMap()
 {
 	int i,j;
-	for(i=0;i<=HSizeMap-1;i++){
-		for(j=0;j<=WSizeMap-1;j++){
-			CurMap[i][j]='#';
+	for(i=0;i<=NBrsEff(CurMap)-1;i++){
+		for(j=0;j<=NKolEff(CurMap)-1;j++){
+			Elmt(CurMap,i,j)='#';
 		}
 	}
 }
@@ -247,58 +249,62 @@ char IntToChar(int X){
 
 void ImportCurMap(infotypeSubMap X)
 {
-	int i,j,retval;
+	int i,j;
 	char C;
 	FILE *filex;
 	filex = fopen (FileMap,"r");
-	retval = fscanf(filex,"%c",&C);
+	fscanf(filex,"%c",&C);
 	while(C!=IntToChar(X)){
-		retval = fscanf(filex,"%c\n",&C);
+		fscanf(filex,"%c\n",&C);
 	}
-	for(i=0;i<=HSizeMap-1;i++){
-		for(j=0;j<=WSizeMap-1;j++){
-		retval = fscanf(filex,"%c\n",&C);
-		CurMap[i][j]=C;
+	for(i=0;i<=NBrsEff(CurMap)-1;i++){
+		for(j=0;j<=NKolEff(CurMap)-1;j++){
+		fscanf(filex,"%c\n",&C);
+		Elmt(CurMap,i,j)=C;
 		}
 	}
-
+	spawn(&CurMap,5);
 }
 
-void PrintCurMap(POINT Player){
+void PrintCurMap(){
     clear();
 	int i,j;
-	for(i=0;i<=HSizeMap-1;i++){
-		for(j=0;j<=WSizeMap-1;j++){
-			if(i==(int)Ordinat(Player) && j==(int)Absis(Player)){
+	for(i=0;i<=NBrsEff(CurMap)-1;i++){
+		for(j=0;j<=NKolEff(CurMap)-1;j++){
+			if(i==(int)Ordinat(PlayerPos) && j==(int)Absis(PlayerPos)){
 				printf(BLU"P"RESET);
 			}
 			else{
-                if (CurMap[i][j] == '#') {
+                if (Elmt(CurMap,i,j) == '#') {
                     printf(YEL);
                 }
-                else if (CurMap[i][j] == '-') {
+                else if (Elmt(CurMap,i,j) == '-') {
                     printf(WHT);
                 }
-                else if (CurMap[i][j] == 'E') {
+                else if (Elmt(CurMap,i,j) == 'E') {
                     printf(RED);
                 }
-                else if (CurMap[i][j] == 'M') {
+                else if (Elmt(CurMap,i,j) == 'M') {
                     printf(GRN);
                 }
-				printf("%c"RESET,CurMap[i][j]);
+				printf("%c"RESET,Elmt(CurMap,i,j));
 			}
 		}
 		printf("\n");
 	}
 }
 
-void Move(POINT *P,float X, float Y){
-	POINT PTemp;
-	Absis(PTemp)=Absis(*P)+X;
-	Ordinat(PTemp)=Ordinat(*P)+Y;
+void Move(float X, float Y){
+	POINT PTemp,PWas;
+	addressTele PTele;
+	
+	Absis(PWas)=Absis(PlayerPos);
+	Ordinat(PWas)=Ordinat(PlayerPos);
+	Absis(PTemp)=Absis(PlayerPos)+X;
+	Ordinat(PTemp)=Ordinat(PlayerPos)+Y;
 	if(Absis(PTemp)>=0 || Absis(PTemp)<10 || Ordinat(PTemp)>=0 || Ordinat(PTemp)<10){
-		if((CurMap[(int)Ordinat(PTemp)][(int)Absis(PTemp)]) != '#'){
-            if ((CurMap[(int)Ordinat(PTemp)][(int)Absis(PTemp)]) == 'E') {
+		if(Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) != '#'){
+            if (Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) == 'E') {
                 //enemy - key edit
 				int battle_outcome;
 				//ENEMY ID NEED HANDLING, connected to Afif's spawnenemy, which I guess isn't here already
@@ -315,116 +321,396 @@ void Move(POINT *P,float X, float Y){
 						printf("apparently you found a bug!\n  this isn't supposed to be printed.\n");
 				}
             }
-			else if ((CurMap[(int)Ordinat(PTemp)][(int)Absis(PTemp)]) != 'M') {
+			else if (Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) != 'M') {
 			    //medicine
-			    CurMap[(int)Ordinat(PTemp)][(int)Absis(PTemp)] = '-';
-                Absis(*P)=Absis(PTemp);
-                Ordinat(*P)=Ordinat(PTemp);
+			    Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) = '-';
+                Absis(PlayerPos)=Absis(PTemp);
+                Ordinat(PlayerPos)=Ordinat(PTemp);
 			}
 			else {
-                Absis(*P)=Absis(PTemp);
-                Ordinat(*P)=Ordinat(PTemp);
+                Absis(PlayerPos)=Absis(PTemp);
+                Ordinat(PlayerPos)=Ordinat(PTemp);
 			}
+		}
+	}
+	if(Absis(PWas)!=Absis(PlayerPos) || Ordinat(PWas)!=Ordinat(PlayerPos)){
+		PTele=SearchPOINTTele(Tele(CurSubMap),PlayerPos);
+		if(PTele!=Nil){
+			CurSubMap=Destination(PTele);
+			PlayerPos=To(PTele);
 		}
 	}
 }
 
-void InitGame(ListSubMap *L){
-	POINT P1,P2;
-	CreateEmptySubMap(L);
-	InsVFirstSubMap(L,3);
-	InsVFirstSubMap(L,2);
-	InsVFirstSubMap(L,1);
-	P1=MakePOINT(9,2);
-	P2=MakePOINT(0,4);
-	ConnectSubMap(L,1,P1,2,P2);
-	P1=MakePOINT(9,7);
-	P2=MakePOINT(0,7);
-	ConnectSubMap(L,1,P1,3,P2);
-	P1=MakePOINT(9,6);
-	P2=MakePOINT(0,1);
-	ConnectSubMap(L,2,P1,3,P2);
+void SaveMap(){
+	FILE *save;
+	addressSubMap PMap;
+	addressTele PTele;
+	int i;
+	
+	save = fopen(FileMapSave,"w");
+	
+	fprintf(save,"PlayerPosition:.\n");
+	i=Info(CurSubMap);
+	fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
+	i=(int) Absis(PlayerPos);
+	fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
+	i=(int) Ordinat(PlayerPos);
+	fprintf(save,"%c%c.\n",(i / 10)+'0',(i % 10)+'0');
+	
+	fprintf(save,"List Map:.\n");
+	PMap=First(LMap);
+	while(PMap!=Nil){
+		i=Info(PMap);
+		fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
+		PMap=Next(PMap);
+	}
+	fprintf(save,".\n");
+	
+	fprintf(save,"Koneksi Map:.\n");
+	PMap=First(LMap);
+	while(PMap!=Nil){
+		i=Info(PMap);
+		fprintf(save,"MAP %c%c :.\n",(i / 10)+'0',(i % 10)+'0');
+		PTele=First(Tele(PMap));
+		while(PTele!=Nil){
+			i=(int) Absis(From(PTele));
+			fprintf(save,"FROM %c%c , ",(i / 10)+'0',(i % 10)+'0');
+			i=(int) Ordinat(From(PTele));
+			fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
+			i=(int) Absis(To(PTele));
+			fprintf(save,"TO %c%c , ",(i / 10)+'0',(i % 10)+'0');
+			i=(int) Ordinat(To(PTele));
+			fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
+			i=Info(Destination(PTele));
+			fprintf(save,"DestMap %c%c.\n",(i / 10)+'0',(i % 10)+'0');
+			PTele=Next(PTele);
+		}
+		
+		PMap=Next(PMap);
+	}
+	
+	fprintf(save,"END!");
+	
+	fclose(save);
+}
+
+void LoadPre(){
+	Kata C;
+	int i;
+	
+	i=1;
+	STARTKATA(FileMapSave);
+	while(!EndFile){
+		C=CKata;
+		printf("\n%d:",i);
+		PrintKata(C);
+		ADVKATA();
+		i++;
+		}
+	
+	
+}
+
+void Load(boolean Default){
+	int CurInfo;
+	char *Val;
+	int i;
+	addressSubMap PMap,DestTemp;
+	POINT FromTemp,ToTemp;
+	
+	
+	Val=(char*) malloc(2 * sizeof(char));
+	
+	if(Default){
+		STARTKATA(FileMapSaveDefault);
+	}else{
+		STARTKATA(FileMapSave);
+	}
+	
+	ADVKATA();
+	
+	ADVKATA();	
+	KataToString(CKata,Val);
+	i=10*(Val[0]-'0')+(Val[1]-'0');
+	CurInfo=i;
+	
+	ADVKATA();	
+	KataToString(CKata,Val);
+	i=10*(Val[0]-'0')+(Val[1]-'0');
+	Absis(PlayerPos)=i;
+	
+	ADVKATA();	
+	KataToString(CKata,Val);
+	i=10*(Val[0]-'0')+(Val[1]-'0');
+	Ordinat(PlayerPos)=i;
+	ADVKATA();
+	
+	
+	
+	
+	ADVKATA();
+	ADVKATA();
+	ADVKATA();
+	
+	ADVKATA();
+	while(CC!='.'){
+	KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		InsVFirstSubMap(&LMap,i);
+		ADVKATA();
+	}
+	KataToString(CKata,Val);
+	i=10*(Val[0]-'0')+(Val[1]-'0');
+	InsVFirstSubMap(&LMap,i);
+	
+	
+	CurSubMap=SearchSubMap(LMap,CurInfo);
+	
+	
+	ADVKATA();
+	while(CC!='.'){
+		ADVKATA();
+	}
+	ADVKATA();
+	ADVKATA();
+	ADVKATA();
+	ADVKATA();
+	
+	while(CKata.TabKata[1]!='E'){
+		ADVKATA();
+		KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		PMap=SearchSubMap(LMap,i);
+		ADVKATA();
+		ADVKATA();
+		ADVKATA();
+		
+		while(CKata.TabKata[1]!='M' && CKata.TabKata[1]!='E'){
+		ADVKATA();
+		KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		Absis(FromTemp)=i;
+		ADVKATA();
+		ADVKATA();
+		KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		Ordinat(FromTemp)=i;
+		
+		ADVKATA();
+		ADVKATA();
+		KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		Absis(ToTemp)=i;
+		ADVKATA();
+		ADVKATA();
+		KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		Ordinat(ToTemp)=i;
+		
+		ADVKATA();
+		ADVKATA();
+		KataToString(CKata,Val);
+		i=10*(Val[0]-'0')+(Val[1]-'0');
+		DestTemp=SearchSubMap(LMap,i);
+		
+		
+		ADVKATA();
+		ADVKATA();
+		
+		InsVFirstTele(&Tele(PMap),FromTemp,ToTemp,DestTemp);
+		}
+		
+	}
+	
+	
+	
+	/*Versilama
+	FILE *load;
+	int i,CurInfo;
+	char C;
+	addressSubMap PMap,DestTemp;
+	POINT FromTemp,ToTemp;
+	
+	CreateEmptySubMap(&LMap);
+	
+	if(Default){
+		load=fopen(FileMapSaveDefault,"r");
+	}
+	else{
+		load=fopen(FileMapSave,"r");
+	}
+	
+	for(i=1;i<=16;i++){
+		fscanf(load,"%c",&C);
+	}
+	
+	fscanf(load,"%c",&C);
+	i=C-'0';
+	fscanf(load,"%c",&C);
+	CurInfo=(i*10)+(C-'0');
+	
+	fscanf(load,"%c",&C);
+	fscanf(load,"%c",&C);
+	i=C-'0';
+	fscanf(load,"%c",&C);
+	Absis(PlayerPos)=(i*10)+(C-'0');
+	
+	fscanf(load,"%c",&C);
+	fscanf(load,"%c",&C);
+	i=C-'0';
+	fscanf(load,"%c",&C);
+	Ordinat(PlayerPos)=(i*10)+(C-'0');
+	
+	
+	for(i=1;i<=11;i++){
+		fscanf(load,"%c",&C);
+	}
+	
+	
+	fscanf(load,"%c",&C);
+	while(C=='0'){
+		i=C-'0';
+		fscanf(load,"%c",&C);
+		i=(i*10)+(C-'0');
+		InsVFirstSubMap(&LMap,i);
+		fscanf(load,"%c",&C);
+		fscanf(load,"%c",&C);
+	}
+	
+	CurSubMap=SearchSubMap(LMap,CurInfo);
+	
+	for(i=1;i<=13;i++){
+		fscanf(load,"%c",&C);
+	}
+	
+	
+	fscanf(load,"%c",&C);
+	while(C=='M'){
+		fscanf(load,"%c",&C);
+		fscanf(load,"%c",&C);
+		fscanf(load,"%c",&C);
+		i=C-'0';
+		fscanf(load,"%c",&C);
+		i=(i*10)+(C-'0');
+		PMap=SearchSubMap(LMap,i);
+		fscanf(load,"%c",&C);
+		fscanf(load,"%c",&C);
+		fscanf(load,"%c",&C);
+		while(C=='F'){
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			i=C-'0';
+			fscanf(load,"%c",&C);
+			Absis(FromTemp)=(i*10)+(C-'0');
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			i=C-'0';
+			fscanf(load,"%c",&C);
+			Ordinat(FromTemp)=(i*10)+(C-'0');
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			i=C-'0';
+			fscanf(load,"%c",&C);
+			Absis(ToTemp)=(i*10)+(C-'0');
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			i=C-'0';
+			fscanf(load,"%c",&C);
+			Ordinat(ToTemp)=(i*10)+(C-'0');
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+			i=C-'0';
+			fscanf(load,"%c",&C);
+			i=(i*10)+(C-'0');
+			DestTemp=SearchSubMap(LMap,i);
+			InsVFirstTele(&Tele(PMap),FromTemp,ToTemp,DestTemp);
+			fscanf(load,"%c",&C);
+			fscanf(load,"%c",&C);
+		}
+	}
+	*/
 }
 
 void Game(ListSubMap *L){
-	POINT Player;
-	addressSubMap PMap;
-	addressTele PTele;
 	char *a;
-	boolean Pindah;
+	addressSubMap CurSubMapTemp;
 
-	Pindah=false;
+	NBrsEff(CurMap)=20;
+	NKolEff(CurMap)=20;
+	
 	a=(char*) malloc (2* sizeof(char));
-	PMap=First(*L);
-	Absis(Player)=5;
-	Ordinat(Player)=5;
-	ImportCurMap(Info(PMap));
+	Load(true);
+	CurSubMapTemp=CurSubMap;
+	ImportCurMap(Info(CurSubMap));
 
     PrintCurMap(Player);
     scanf("%s",a);
-	while(strcmp(a,"EXIT")) {
-		if(!strcmp(a,"GU")||!strcmp(a,"gu")){
-			Move(&Player,0,-1);
-			PTele=SearchPOINTTele(Tele(PMap),Player);
-			if(PTele!=Nil){
-				PMap=Destination(PTele);
-				Player=To(PTele);
-				Pindah=true;
-			}
+	while(mystrcmp(a,"EXIT")) {
+		if(!mystrcmp(a,"GU")||!mystrcmp(a,"gu")){
+			Move(0,-1);
 		}
-		else if(!strcmp(a,"GD")||!strcmp(a,"gd")){
-			Move(&Player,0,1);
-			PTele=SearchPOINTTele(Tele(PMap),Player);
-			if(PTele!=Nil){
-				PMap=Destination(PTele);
-				Player=To(PTele);
-				Pindah=true;
-			}
+		else if(!mystrcmp(a,"GD")||!mystrcmp(a,"gd")){
+			Move(0,1);
 		}
-		else if(!strcmp(a,"GL")||!strcmp(a,"gl")){
-			Move(&Player,-1,0);
-			PTele=SearchPOINTTele(Tele(PMap),Player);
-			if(PTele!=Nil){
-				PMap=Destination(PTele);
-				Player=To(PTele);
-				Pindah=true;
-			}
+		else if(!mystrcmp(a,"GL")||!mystrcmp(a,"gl")){
+			Move(-1,0);
 		}
-		else if(!strcmp(a,"GR")||!strcmp(a,"gr")){
-			Move(&Player,1,0);
-			PTele=SearchPOINTTele(Tele(PMap),Player);
-			if(PTele!=Nil){
-				PMap=Destination(PTele);
-				Player=To(PTele);
-				Pindah=true;
-			}
+		else if(!mystrcmp(a,"GR")||!mystrcmp(a,"gr")){
+			Move(1,0);
 		}
-		else if (!strcmp(a,"SKILL")) {
+        else if(!mystrcmp(a,"SAVE")){
+			SaveMap();
+		}
+		else if(!mystrcmp(a,"LOAD")){
+			Load(false);
+		}
+		else if (!mystrcmp(a,"SKILL")) {
             SkillMenu();
 		}
         else {
 			printf("NOT GOING ANYWHERE\n");
 		}
-		if(Pindah){
-			ImportCurMap(Info(PMap));
-			Pindah=false;
+		if(CurSubMapTemp!=CurSubMap){
+			ImportCurMap(Info(CurSubMap));
+			CurSubMapTemp=CurSubMap;
 		}
 		PrintCurMap(Player);
-		if(!strcmp(a,"GU")||!strcmp(a,"gu")){
+		if(!mystrcmp(a,"GU")||!mystrcmp(a,"gu")){
 			printf("Going UP\n");
 		}
-		else if(!strcmp(a,"GD")||!strcmp(a,"gd")){
+		else if(!mystrcmp(a,"GD")||!mystrcmp(a,"gd")){
 			printf("Going DOWN\n");
 		}
-		else if(!strcmp(a,"GL")||!strcmp(a,"gl")){
+		else if(!mystrcmp(a,"GL")||!mystrcmp(a,"gl")){
 			printf("Going LEFT\n");
 		}
-		else if(!strcmp(a,"GR")||!strcmp(a,"gr")){
+		else if(!mystrcmp(a,"GR")||!mystrcmp(a,"gr")){
 			printf("Going RIGHT\n");
 		}
-		else if (!strcmp(a,"SKILL")) {
+		else if (!mystrcmp(a,"SKILL")) {
 		}
-        else {
+        else if(!mystrcmp(a,"SAVE")){
+			printf("Saved\n");
+		}
+		else if(!mystrcmp(a,"LOAD")){
+			printf("Loaded\n");
+		}
+		else {
 			printf("NOT GOING ANYWHERE\n");
 		}
 		scanf("%s",a);

@@ -49,5 +49,5 @@
  
 * **Compiling Command:**
 ```bash
-	gcc battle.c brightsoul.c lilfx.c mesinkar.c mesinkata.c stacklist.c queue.c reader.c narrate.c monsterdb.c mystring.c tree.c skill.c listskill.c map.c point.c -o atest -lm
+	gcc battle.c brightsoul.c lilfx.c mesinkar.c mesinkata.c stacklist.c queue.c reader.c narrate.c monsterdb.c mystring.c tree.c skill.c listskill.c map.c mypoint.c matriks.c spawnenemy.c -o atest -lm
 ```
