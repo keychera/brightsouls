@@ -101,7 +101,7 @@ void battle_lvlup(){
 	DEF = DEF + (PlayerLVL%2 + 1)
 	EXP = EXP + (PlayerLVL*EXP/2)
 */
-    char st[20],s[6];
+    //char st[20],s[6]; this unused somehow key edit
 	Player.LVL++;
 	Player.HP += (Player.LVL%2 + 2) + (Player.LVL%2/5);
 	Player.Spoint += 1;
@@ -190,14 +190,14 @@ void battle_display(int simulatePass){
 	int spaces;
 	clear();
 	//upperline
-		printf(" ");
+		printf(YEL " ");
 		for(i = 1;i <= display_size-2;i++) printf("_");
 		printf(" \n");
 
 	//player stat
 		//name
 			printf("|");
-			printf("%s",player_name); //assumption : name under 20 char
+			printf(GRN "%s" YEL,player_name); //assumption : name under 20 char
 			for(i = 1;i <= name_size - mystrlen(player_name);i++) printf(" ");
 			printf("|");
 		//the rest of the stat
@@ -206,24 +206,24 @@ void battle_display(int simulatePass){
 				spaces = 6;
 				switch (j) {
 					case 1 :
-						printf("LVL : %d",player_lvl);
+						printf(GRN "LVL : %d" YEL,player_lvl);
 						spaces += digit(player_lvl);
 						break;
 					case 2 :
-						printf("HP  : %d",player_hp);
+						printf(GRN "HP  : %d" YEL,player_hp);
 						spaces += digit(player_hp);
 						spaces += (player_hp < 0)? 1:0;
 						break;
 					case 3 :
-						printf("STR : %d",player_str);
+						printf(GRN "STR : %d" YEL,player_str);
 						spaces += digit(player_str);
 						break;
 					case 4 :
-						printf("DEF : %d",player_def);
+						printf(GRN "DEF : %d" YEL,player_def);
 						spaces += digit(player_def);
 						break;
 					case 5 :
-						printf("Round %d",battle_round);
+						printf(CYN "Round %d" YEL,battle_round);
 						spaces += digit(battle_round);
 						break;
 					default :
@@ -246,18 +246,18 @@ void battle_display(int simulatePass){
 	//enemy stat
 		//name
 			printf("|");
-			printf("%s",enemy_name); //assumption : name under 20 char
+			printf(RED "%s" YEL ,enemy_name); //assumption : name under 20 char
 			for(i = 1;i <= name_size - mystrlen(enemy_name);i++) printf(" ");
 			printf("|");
 		//hp
 			printf("|");
-			printf("HP  : %d",enemy_hp);
+			printf(RED "HP  : %d" YEL,enemy_hp);
 			spaces = 6 + digit(enemy_hp);
 			spaces += (enemy_hp < 0)? 1:0;
 			for(i = 1;i <= sub_size - spaces;i++) printf(" ");
 			printf("|");
 		//action
-			printf("|");
+			printf("|" CYN);
 			for(i = 1;i <= actionNumber;i++) {
 				switch (game_state) {
 					case 1 :for(i = 1;i <= actionNumber;i++) {
@@ -282,7 +282,7 @@ void battle_display(int simulatePass){
 					//default:
 				}
 			}
-			printf("|");
+			printf(YEL "|");
 		//newline 'line'
 			printf("\n|");
 			for(i = 1;i <= name_size;i++) printf("_");
@@ -302,13 +302,13 @@ void battle_display(int simulatePass){
 			printf("|\n");
 		//text
 			printf("|");
-			printf("%s attacked!",enemy_name);
+			printf(RED "%s attacked!"YEL ,enemy_name);
 			for(i = 1;i <= display_size-2-mystrlen(enemy_name)-10;i++) printf(" ");
 			printf("|\n");
 		//writeNarrative
 			for(j = 1;j <= narratives.size;j++) {
 				printf("|");
-				printf("%s",narratives.array[j-1]);
+				printf(CYN "%s" YEL,narratives.array[j-1]);
 				for(i = 1;i <= display_size-2-mystrlen(narratives.array[j-1]);i++) printf(" ");
 				printf("|\n");
 			}
@@ -324,13 +324,13 @@ void battle_display(int simulatePass){
 	//player's current action
 		//interface
 			printf("|");
-			printf("Inserted Commands"); //assumption : name under 20 char
+			printf(CYN "Inserted Commands" YEL); //assumption : name under 20 char
 			for(i = 1;i <= name_size - 17;i++) printf(" ");
 			printf("|");
 		//action
 			printf("|");
 			for(i = 1;i <= actionNumber;i++) {
-				printf("%c ",player_action.T[player_action.HEAD + i]); //Queue rep for player_action
+				printf(CYN "%c " YEL,player_action.T[player_action.HEAD + i]); //Queue rep for player_action
 			}
 			for(i = 1;i <= (sub_size * 5);i++) printf(" ");
 			printf("|");
