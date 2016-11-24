@@ -27,7 +27,7 @@
 	extern int game_state; // 1 for input, 2 for battle simulation
 	extern Queue player_action; // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
 	extern Queue current_action; // + 1 because we're not using idx 0 //key edit
-	extern int damageDone;
+	extern int damageDone,damageDone2;
 //narrative variable
 	extern tNarrative narratives;
 //enemy show & close action array

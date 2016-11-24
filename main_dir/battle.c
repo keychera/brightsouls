@@ -21,7 +21,7 @@
 	int game_state; // 1 for input, 3 for battle simulation
 	Queue player_action; // change to Queue, size declaration in battle_engage // + 1 because there was an unknown error when changing the last idx value, it somehow affects other variab.. NOPE I know exactly what happened
 	Queue current_action; // + 1 because we're not using idx 0 //key edit queue
-	int damageDone;
+	int damageDone,damageDone2;
 //narrative variable
 	tNarrative narratives;
 //enemy show & close action array
@@ -421,22 +421,17 @@ void battle_simulate(){
 void battle_calculateImpact(int* outcome){
 //calculate battle impact
 	damageDone = 0;
+	damageDone2 = 0;
 	switch (*outcome) {
 		//case 2,4,5 doesn't affect both sides, no damage done
 		case 1	:
 		case 9	:
-				if (player_str > enemy_str) {
+				if (player_str != enemy_str) {	
 					damageDone = player_str - enemy_def;
 					enemy_hp -= damageDone;
-				} else {
-					if (player_str < enemy_str) {
-						damageDone = enemy_str - player_def;
-						player_hp -= damageDone;
-					} else {
-						*outcome = 10;
-					}
+					damageDone2 = enemy_str - player_def;
+					player_hp -= damageDone2;
 				}
-			break;
 		case 3	:
 				damageDone = player_str;
 				enemy_hp -= damageDone;
@@ -464,11 +459,15 @@ void battle_narrate(char narrateType,int outcome){
 		reader_openFile("data_dir/battle_narration.txt");
 		char* battleStatus[5]; 	//passing reference for reader_build
 								//where 0 : player name 1 : enemy name 2 : damageDone
+		
 		battleStatus[0] = player_name;
 		battleStatus[1] = enemy_name;
-		char intToStr[strlength];
+		char intToStr[strlength],intToStr2[strlength];
 		sprintf(intToStr,"%d",damageDone);
 		battleStatus[2] = intToStr;
+		sprintf(intToStr2,"%d",damageDone2);
+		battleStatus[3] = intToStr2;
+		
 		char code[strlength],sentence[strlength];
 		switch(outcome) {
 			case 1 : mystrcpy(code,"ava");break;

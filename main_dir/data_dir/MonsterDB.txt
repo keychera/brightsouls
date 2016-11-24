@@ -1,2 +1,2 @@
 0000 | dummy01 | 15 | 7 | 2 | 100 | BBBF | FBAB | ABAB | AFAB | AFAF | FBAA | BAFA | BABA | BABB | FAAA .
-0001 | dummy02 | 20 | 4 | 6 | 100 | ABAF | AFAB | ABAF | AFAB | AFAF | FBAA | BAFA | BABA | BFAA | FABA .!
+0001 | dummy02 | 20 | 9 | 6 | 100 | ABAF | AFAB | ABAF | AFAB | AFAF | FBAA | BAFA | BABA | BFAA | FABA .!

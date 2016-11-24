@@ -1,11 +1,12 @@
-ava test1
-avb <m> blocks <p>'s attack!
-avf <m> tries to flank but <p> attacks from front! <m> -<dmg> HP
-bva test 4
-bvb test 5 
-bvf test6
-fva test 7
-fvb test 8
-fvf test9
+ava <m> and <p> attacked each other! <m> -<dmg> HP! <p> -<dmg2> HP!
+avb <m> blocked <p>'s attack!
+avf <m> tried to flank but <p> attacks from front! <m> -<dmg> HP!
+bva <p> blocked <m>'s attack!
+bvb <p> and <m> tried to block nonexistent attack, both sides felt stupid 
+bvf <m> flanked <p>! <p> -<dmg> HP!
+fva <p> tried to flank but <m> attacks from front! <p> -<dmg> HP!
+fvb <p> flanked <m>! <m> -<dmg> HP!
+fvf <m> and <p> flanked each other! <m> -<dmg> HP! <p> -<dmg2> HP!
 stl <p> is as strong as <m> tho
-ggg <m> tries to flank but <p> attacks from front! <m> -<dmg> HP
+999 this shouldn't be printed thor
+

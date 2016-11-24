@@ -100,6 +100,7 @@ void reader_specialChar(char* special,char** battleStatus,char* outp,int *newLen
 	char *player_name = battleStatus[0];
 	char *enemy_name = battleStatus[1];
 	char *damage  = battleStatus[2];
+	char *damage2  = battleStatus[3];
 	
 	char* s;
 	int i = *newLength;
@@ -122,6 +123,14 @@ void reader_specialChar(char* special,char** battleStatus,char* outp,int *newLen
 				{
 					outp[i] = *s;
 					i++;
+				}
+			} else {
+				if (mystrcmp(special,"dmg2") == 0) {
+					for ( s=&damage2[0]; (*s != '\000'); s++ )
+					{
+						outp[i] = *s;
+						i++;
+					}
 				}
 			}
 		}
