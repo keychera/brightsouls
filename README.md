@@ -7,6 +7,13 @@
   * Battle system
 
 * **Commit Changelog Details:**
+ * "Fix game balance" <cc1bbd3>
+	 - Fix battle issue (not a good solution though, just a workaround), detailed issue pm me
+	 - Added more enemy
+	 - Player Max HP decreased from 25 to 23
+	 - Player STR decreased from 8 to 6
+	 - Player DEF decreased from 7 to 5
+
  * "COMBINED SKILL + MAP + BATTLE! the gameplay is visible now + cleanup" + "Fixing skill issue" <f908f46> <2901768>
      - SKILL , MAP, BATTLE
      - add -lm on compiling command for math.h
