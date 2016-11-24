@@ -1,2 +1,7 @@
-0000 | dummy01 | 15 | 7 | 2 | 100 | BBBF | FBAB | ABAB | AFAB | AFAF | FBAA | BAFA | BABA | BABB | FAAA .
-0001 | dummy02 | 20 | 9 | 6 | 100 | ABAF | AFAB | ABAF | AFAB | AFAF | FBAA | BAFA | BABA | BFAA | FABA .!
+0000 | bat         | 8  | 6  | 2  | 25   | BBBF | FBAB | ABAB | AFAB | AFAF | FBAA | BAFA | BABA | BABB | FAAA .
+0001 | zombie      | 15 | 6  | 4  | 50   | ABAF | AFAB | ABAF | AFAB | AFAF | FBAA | BAFA | BABA | BFAA | FABA .
+0002 | skeleton    | 14 | 8  | 3  | 50   | ABAF | FFAB | ABBF | BFAA | BBAF | FBAA | BAFA | BAFA | BFAB | AFBA .
+0003 | ghoul       | 18 | 7  | 6  | 75   | ABAF | AFAB | ABAF | AFAB | AFAF | FBAA | BAFA | BABA | BFAA | FABA .
+0004 | hound       | 14 | 12 | 5  | 75   | AFAF | BAAA | AAAA | FFFA | FAAF | BAAB | ABFA | BABA | BFAA | AABA .
+0005 | golem       | 30 | 5  | 12 | 100  | BBAB | BFBB | BBAF | ABBB | BBAF | FBBA | BAAB | BFBA | BFAB | BFAB .
+0006 | vampire     | 20 | 17 | 10 | 100  | AFAB | BAFA | AABA | AFBA | BAAF | AAAB | ABFA | AABA | BFAA | AAAA .!

@@ -91,6 +91,17 @@ int battle_conclude(int roundMax){
 		battle_ongoing = false;
 		return 2;
 	}
+	else if (player_hp <= 0 && enemy_hp <= 0)
+	{
+		Player.HP = 0;
+		enemy_hp = 0;
+		narrate_createEmpty(&narratives);
+		narrate_narrativeAdd(&narratives,"You LOSE!");
+        battle_display(0);
+        while(getchar() != '\n');
+		battle_ongoing = false;
+		return 2;		
+	}
 }
 
 void battle_lvlup(){

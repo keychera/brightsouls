@@ -68,9 +68,9 @@ int main() {
 			{
 				//setting player initial stat
 				Player.LVL = 1;
-				Player.HP = 25;
-				Player.STR = 8;
-				Player.DEF = 7;
+				Player.HP = 23;
+				Player.STR = 6;
+				Player.DEF = 5;
 				Player.EXP = 0;
 				Player.maxHP = 25;
 				Player.maxEXP = 100;
