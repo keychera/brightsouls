@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "brightsoul.h" //key edit for compatibility
 #include "boolean.h"
 #include "mypoint.h"
@@ -51,11 +52,15 @@ typedef struct {
 	addressSubMap First;
 } ListSubMap;
 
+typedef addressTele addressEnemy;
+typedef ListTele ListEnemy;
+
 /*GLOBAL VARIABLE*/
 MATRIKS CurMap;
 addressSubMap CurSubMap;
 POINT PlayerPos;
 ListSubMap LMap;
+ListEnemy LEnemy;
 
 /*Selektor*/
 #define From(P) (P)->From
@@ -65,6 +70,10 @@ ListSubMap LMap;
 #define Info(P) (P)->info
 #define Tele(P) (P)->Tele
 #define First(L) (L).First
+#define Pos(E) (E)->From
+#define Lvl(E) Absis((E)->To)
+#define Id(E) Ordinat((E)->To)
+#define Map(E) (E)->Destination
 /*********************/
 /*****LIST SUBMAP*****/
 /*********************/
@@ -96,13 +105,14 @@ void DelSubMap (ListSubMap *L, addressSubMap P, infotypeSubMap *X);
 /*Menghapus elemen beralamatkan P dari List. Info(P) ditampung dalam X.
 lalu didealokasi. Jika tidak ada P dalam List, tidak ada perubahan*/
 
+
 /*********************/
 /******LIST TELE******/
 /*********************/
 boolean IsEmptyTele(ListTele L);
 /*Menentukan apakah List Tele L kosong*/
 
-void CreateEmptyTele(ListTele L);
+void CreateEmptyTele(ListTele *L);
 /*Mengosongkan List Tele L*/
 
 addressTele AlokasiTele (POINT From,POINT To, addressSubMap Dest);
@@ -123,9 +133,45 @@ void ConnectSubMap(ListSubMap *L, infotypeSubMap X1,POINT C1 ,infotypeSubMap X2,
 /*Menyambungkan 2 submap yaitu submap X1 pada koordinat C1 dan submap
 X2 padaa koordinat C2*/
 
+/**********************/
+/******LIST ENEMY******/
+/**********************/
+boolean IsEmptyEnemy(ListEnemy L);
+/*Menentukan apakah list enemy kosong*/
 
+void CreateEmptyEnemy(ListEnemy *L);
+/*Mengosongkan list enemy*/
+
+addressEnemy AlokasiEnemy(POINT Pos, int Id,int Level,int Map);
+/*Memesan memori untuk elemen list enemy*/
+
+void DealokasiEnemy(addressEnemy E);
+/*Membebaskan memori yang dipakai elemen List enemy*/
+
+void InsVFirstEnemy(ListEnemy *L, POINT Pos, int Id, int Level,int Map);
+/*Memasukan elemen list enemy ke dalam list*/
+
+void DeleteEnemy(ListEnemy *L, addressEnemy P);
+/*Menghapus elemen list enemy beralamatkan P dari list enemy*/
+
+boolean SearchMapEnemy(ListEnemy L, int Map);
+/*Menentukan apakah ada enemy dalam suatu map*/
+
+addressEnemy SearchPosEnemy(ListEnemy L, POINT Pos, int Map);
+/*Mencari enemy yang berada dalam map dan posisinya. Mengembalikan Nil
+jika tidak menemukan enemy*/
+
+void PrintListEnemy(ListEnemy L);
+/*Menulis data semua enemy yang ada pada list*/
+
+void MelistEnemyBaru();
+/*Mengisi semua musuh baru yang ada pada CurMap ke dalam list enemy*/
+
+void ImportEnemy();
+/*Mengimport data enemy yang seharusnya ada pada CurSubMap dan mengisi
+CurMap dengan lambang enemy*/
 /*********************/
-/******MAIN_GAME******/
+/*********MAP*********/
 /*********************/
 void CreateEmptyCurMap();
 /*Mengosongkan CurMap. Mengisinya dengan '#'*/
@@ -143,6 +189,23 @@ void Move(float X, float Y);
 /*Memindahkan koordinat player sejauh X,Y. jika ada dinding atau batas
 terluar peta, tidak jadi pindah*/
 
+
+
+/*********************/
+/******SAVE/LOAD******/
+/*********************/
+void SavePlayerState();
+/*Menyimpan state player ke file external*/
+
+void LoadPlayerState();
+/*Mengambil state player dari file external*/
+
+void SaveEnemyList();
+/*menyimpan list enemy ke dalam file external*/
+
+void LoadEnemyList();
+/*Mengambil list enemy dari dalam file external*/
+
 void SaveMap();
 /*Menyimpan Lokasi player dan kondisi Map (List Submap beserta List
 Telenya) ke file external FileSaveMap*/
@@ -154,7 +217,12 @@ void Load(boolean Default);
 /*Mengimpor Lokasi player dan kondisi map dari file external FileSaveMap
 */
 
-void Game();
+
+
+/**********************/
+/****FINISH_PRODUCT****/
+/**********************/
+void Game(boolean New);
 /*Mengimpor map dari file eksternal Default dan menampilkan game dalam 
 mode peta.Akan keluar jika pengguna memasukan EXIT*/
 

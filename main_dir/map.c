@@ -8,6 +8,8 @@
 #define FileMap "data_dir/map.txt"
 #define FileMapSave "data_dir/mapsave.txt"
 #define FileMapSaveDefault "data_dir/DefaultMap.txt"
+#define FilePlayerSave "data_dir/playersave.dat"
+#define FileEnemySave "data_dir/enemysave.txt"
 
 /*********************/
 /*****LIST SUBMAP*****/
@@ -137,9 +139,9 @@ boolean IsEmptyTele(ListTele L)
 	return (First(L)==Nil);
 }
 
-void CreateEmptyTele(ListTele L)
+void CreateEmptyTele(ListTele *L)
 {
-	First(L)=Nil;
+	First(*L)=Nil;
 }
 
 addressTele AlokasiTele (POINT From,POINT To, addressSubMap Dest)
@@ -201,14 +203,151 @@ void ConnectSubMap(ListSubMap *L, infotypeSubMap X1,POINT C1 ,infotypeSubMap X2,
 
 
 
+
+/**********************/
+/******LIST ENEMY******/
+/**********************/
+boolean IsEmptyEnemy(ListEnemy L){
+	return First(L)==Nil;
+}
+
+void CreateEmptyEnemy(ListEnemy *L)
+{
+	First(*L)=Nil;
+}
+
+addressEnemy AlokasiEnemy(POINT Pos, int Id,int Level,int Map)
+{
+	POINT To;
+	addressEnemy PEnemy;
+	addressSubMap PMap;
+	Absis(To)=Id;
+	Ordinat(To)=Level;
+	PMap=SearchSubMap(LMap,Map);
+	
+	
+	PEnemy=AlokasiTele(Pos,To,PMap);
+	return PEnemy;
+	
+}
+
+void DealokasiEnemy(addressEnemy E){
+	free(E);
+}
+
+void InsVFirstEnemy(ListEnemy *L, POINT Pos, int Id,int Level, int Map)
+{
+	addressEnemy PEnemy;
+	
+	PEnemy=AlokasiEnemy(Pos,Id,Level,Map);
+	if(PEnemy!=Nil){
+		Next(PEnemy)=First(*L);
+		First(*L)=PEnemy;
+	}
+}
+
+void DeleteEnemy(ListEnemy *L, addressEnemy P){
+	addressEnemy PTemp,Prec;
+	PTemp=First(*L);
+	while(PTemp!=P){
+		Prec=PTemp;
+		PTemp=Next(PTemp);
+	}
+	if(PTemp==First(*L)){
+		First(*L)=Next(PTemp);
+	}
+	else{
+		Next(Prec)=Next(PTemp);
+	}
+	
+	DealokasiEnemy(PTemp);
+}
+
+boolean SearchMapEnemy(ListEnemy L, int Map)
+{
+	addressEnemy P;
+	boolean found;
+	
+	found=false;
+	P=First(L);
+	while(!found && P != Nil){
+		if(Info(Map(P))==Map){
+			found=true;
+		}
+		else{
+			P=Next(P);
+		}
+	}
+	
+	return P!=Nil;
+}
+
+addressEnemy SearchPosEnemy(ListEnemy L, POINT Pos, int Map)
+{
+	addressEnemy P;
+	boolean found;
+	
+	found=false;
+	P=First(L);
+	while(!found && P != Nil){
+		if(Ordinat(Pos(P))==Ordinat(Pos) && Absis(Pos(P))==Absis(Pos) && Info(Map(P))==Map){
+			found=true;
+		}
+		else{
+			P=Next(P);
+		}
+	}
+	
+	return P;
+}
+
+void PrintListEnemy(ListEnemy L){
+	addressEnemy P;
+	
+	P=First(L);
+	while(P != Nil){
+		printf("Id:%.0f ",Id(P));
+		printf("Level:%.0f ",Lvl(P));
+		printf("Pos:%.0f,%.0f ",Absis(Pos(P)),Ordinat(Pos(P)));
+		printf("Map:%d\n",Info(Map(P)));
+		P=Next(P);
+	}
+}
+
+void MelistEnemyBaru(){
+	int i,j;
+	srand(time(NULL));
+	for(i=1;i<=NBrsEff(CurMap);i++){
+		for(j=1;j<=NKolEff(CurMap);j++){
+			if(Elmt(CurMap,i,j)=='E'){
+				InsVFirstEnemy(&LEnemy,MakePOINT(i,j),(rand()%2)+1,Info(CurSubMap),Info(CurSubMap));
+			}
+		}
+	}
+}
+
+void ImportEnemy(){
+	addressEnemy P;
+	
+	P=First(LEnemy);
+	while(P!=Nil){
+		if(Map(P)==CurSubMap){
+			Elmt(CurMap,(int) Absis(Pos(P)),(int) Ordinat(Pos(P)))='E';
+		}
+		P=Next(P);
+	}
+}
+
+
+
 /*********************/
 /*********MAP*********/
 /*********************/
 void CreateEmptyCurMap()
 {
 	int i,j;
-	for(i=0;i<=NBrsEff(CurMap)-1;i++){
-		for(j=0;j<=NKolEff(CurMap)-1;j++){
+	for(i=1;i<=NBrsEff(CurMap);i++){
+		for(j=1;j<=NKolEff(CurMap);j++){
 			Elmt(CurMap,i,j)='#';
 		}
 	}
@@ -257,20 +396,28 @@ void ImportCurMap(infotypeSubMap X)
 	while(C!=IntToChar(X)){
 		fscanf(filex,"%c\n",&C);
 	}
-	for(i=0;i<=NBrsEff(CurMap)-1;i++){
-		for(j=0;j<=NKolEff(CurMap)-1;j++){
+	for(i=1;i<=NBrsEff(CurMap);i++){
+		for(j=1;j<=NKolEff(CurMap);j++){
 		fscanf(filex,"%c\n",&C);
 		Elmt(CurMap,i,j)=C;
 		}
 	}
-	spawn(&CurMap,5);
+	
+	if(SearchMapEnemy(LEnemy,Info(CurSubMap))){
+		ImportEnemy();
+	}
+	else{
+		spawn(&CurMap,5);
+		MelistEnemyBaru();
+	}
 }
 
 void PrintCurMap(){
     clear();
 	int i,j;
-	for(i=0;i<=NBrsEff(CurMap)-1;i++){
-		for(j=0;j<=NKolEff(CurMap)-1;j++){
+	for(i=1;i<=NBrsEff(CurMap);i++){
+		for(j=1;j<=NKolEff(CurMap);j++){
+			printf(" ");
 			if(i==(int)Ordinat(PlayerPos) && j==(int)Absis(PlayerPos)){
 				printf(BLU"P"RESET);
 			}
@@ -297,28 +444,33 @@ void PrintCurMap(){
 void Move(float X, float Y){
 	POINT PTemp,PWas;
 	addressTele PTele;
+	addressEnemy PEnemy;
 	
 	Absis(PWas)=Absis(PlayerPos);
 	Ordinat(PWas)=Ordinat(PlayerPos);
 	Absis(PTemp)=Absis(PlayerPos)+X;
 	Ordinat(PTemp)=Ordinat(PlayerPos)+Y;
-	if(Absis(PTemp)>=0 || Absis(PTemp)<10 || Ordinat(PTemp)>=0 || Ordinat(PTemp)<10){
+	if(Absis(PTemp)>=1 && Absis(PTemp)<=20 && Ordinat(PTemp)>=1 && Ordinat(PTemp)<=20){
 		if(Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) != '#'){
             if (Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) == 'E') {
+				PEnemy=SearchPosEnemy(LEnemy,MakePOINT(Ordinat(PTemp),Absis(PTemp)),Info(CurSubMap));
                 //enemy - key edit
 				int battle_outcome;
 				//ENEMY ID NEED HANDLING, connected to Afif's spawnenemy, which I guess isn't here already
 				// EnemyStat enemy; key edit - not used
 				LoadEnemy("data_dir/MonsterDB.txt");
-				Enemy[1].ID = 1; //handle this
-				battle_initiate(Enemy[1].ID, 1,&battle_outcome); //handle enemy id please
-				//do something with battle_outcome here, a message to Lazu
+				Enemy[1].ID = Id(PEnemy); //handle this
+				battle_initiate(Id(PEnemy), Lvl(PEnemy),&battle_outcome); //handle enemy id please
 				switch (battle_outcome) {
 					case 1 :printf("You defeated the monster!\n"); break;
 					case 2 :printf("You suck at this.\n"); break;
 					case 3 :printf("ooo better luck next time kiddo\n"); break;
 					default:
 						printf("apparently you found a bug!\n  this isn't supposed to be printed.\n");
+				}
+				if(battle_outcome==1){
+					Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp))='-';
+					DeleteEnemy(&LEnemy,PEnemy);
 				}
             }
 			else if (Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) != 'M') {
@@ -339,6 +491,105 @@ void Move(float X, float Y){
 			CurSubMap=Destination(PTele);
 			PlayerPos=To(PTele);
 		}
+	}
+}
+
+
+
+/*********************/
+/******SAVE/LOAD******/
+/*********************/
+void SavePlayerState(){
+	FILE *save;
+	
+	save = fopen(FilePlayerSave,"w");
+	
+	fwrite(&Player,sizeof(PlayerStat),1,save);
+	fclose(save);
+}
+
+void LoadPlayerState(){
+	FILE *load;
+	PlayerStat PTemp;
+	
+	load = fopen(FilePlayerSave,"r");
+	fread(&PTemp,sizeof(PlayerStat),1,load);
+	
+	Player=PTemp;
+	
+}
+
+void SaveEnemyList(){
+	FILE *save;
+	addressEnemy PEnemy;
+	int Id,X,Y,Level,Map;
+	
+	save = fopen(FileEnemySave,"w");
+	PEnemy=First(LEnemy);
+	while(PEnemy!=Nil){
+		Id=(int)Id(PEnemy);
+		fprintf(save,"%c%c ",(Id/10)+'0',(Id%10)+'0');
+		X=(int)Absis(Pos(PEnemy));
+		Y=(int)Ordinat(Pos(PEnemy));
+		fprintf(save,"%c%c,%c%c ",(X/10)+'0',(X%10)+'0',(Y/10)+'0',(Y%10)+'0');
+		Level=(int)Lvl(PEnemy);
+		fprintf(save,"%c%c ",(Level/10)+'0',(Level%10)+'0');
+		Map=(int)Info(Map(PEnemy));
+		fprintf(save,"%c%c\n",(Map/10)+'0',(Map%10)+'0');
+		
+		PEnemy=Next(PEnemy);
+	}
+	fprintf(save,"!");
+	
+	fclose(save);
+	
+}
+
+void LoadEnemyList(){
+	POINT Pos;
+	int Id, Level, Map;
+	
+	CreateEmptyEnemy(&LEnemy);
+	
+	START(FileEnemySave);
+	while(CC!='!'){
+		Id=CC-'0';
+		ADV();
+		Id=10*Id+(CC-'0');
+		
+		ADV();
+		ADV();
+		
+		Absis(Pos)=CC-'0';
+		ADV();
+		Absis(Pos)=10*Absis(Pos)+(CC-'0');
+		
+		ADV();
+		ADV();
+		
+		Ordinat(Pos)=CC-'0';
+		ADV();
+		Ordinat(Pos)=10*Ordinat(Pos)+(CC-'0');
+		
+		ADV();
+		ADV();
+		
+		Level=CC-'0';
+		ADV();
+		Level=10*Level+(CC-'0');
+		
+		ADV();
+		ADV();
+		
+		Map=CC-'0';
+		ADV();
+		Map=10*Map+(CC-'0');
+		
+		InsVFirstEnemy(&LEnemy,Pos,Id,Level,Map);
+		
+		ADV();
+		ADV();
+		
 	}
 }
 
@@ -646,15 +897,30 @@ void Load(boolean Default){
 	*/
 }
 
-void Game(ListSubMap *L){
+
+
+/**********************/
+/****FINISH_PRODUCT****/
+/**********************/
+void Game(boolean New){
 	char *a;
 	addressSubMap CurSubMapTemp;
+	
+	
+	CreateEmptyEnemy(&LEnemy);
 
 	NBrsEff(CurMap)=20;
 	NKolEff(CurMap)=20;
 	
-	a=(char*) malloc (2* sizeof(char));
-	Load(true);
+	a=(char*) malloc (10* sizeof(char));
+	if(New){
+		Load(true);
+	}
+	else{
+		Load(false);
+		LoadPlayerState();
+		LoadEnemyList();
+	}
 	CurSubMapTemp=CurSubMap;
 	ImportCurMap(Info(CurSubMap));
 
@@ -675,9 +941,14 @@ void Game(ListSubMap *L){
 		}
         else if(!mystrcmp(a,"SAVE")){
 			SaveMap();
+			SavePlayerState();
+			SaveEnemyList();
 		}
 		else if(!mystrcmp(a,"LOAD")){
 			Load(false);
+			LoadPlayerState();
+			LoadEnemyList();
+			PrintListEnemy(LEnemy);
 		}
 		else if (!mystrcmp(a,"SKILL")) {
             SkillMenu();

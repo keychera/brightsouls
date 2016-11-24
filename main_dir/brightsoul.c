@@ -79,7 +79,7 @@ int main() {
 				ImportSkill();
 				Skill = ImportTree("data_dir/tree.txt");
 				Player.Spoint = 15;
-				Game(&BigMap);
+				Game(true);
 			}
 			else
 			{
@@ -93,6 +93,7 @@ int main() {
 		else if (input == 3) //load game
 		{
 			//load
+			Game(false);
 			message = 3;
 			InputValid = false; //key edit for looping instead of exiting
 		}

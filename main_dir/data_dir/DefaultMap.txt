@@ -1,15 +1,15 @@
 PlayerPosition:.
-01 03 03.
+01 04 04.
 List Map:.
 03 02 01 .
 Koneksi Map:.
 MAP 03 :.
-FROM 00 , 04 TO 19 , 03 DestMap 01.
-FROM 10 , 19 TO 19 , 13 DestMap 02.
+FROM 01 , 05 TO 20 , 04 DestMap 01.
+FROM 11 , 20 TO 20 , 14 DestMap 02.
 MAP 02 :.
-FROM 09 , 00 TO 09 , 19 DestMap 01.
-FROM 19 , 13 TO 10 , 19 DestMap 03.
+FROM 10 , 01 TO 10 , 20 DestMap 01.
+FROM 20 , 14 TO 11 , 20 DestMap 03.
 MAP 01 :.
-FROM 09 , 19 TO 09 , 00 DestMap 02.
-FROM 19 , 03 TO 00 , 04 DestMap 03.
+FROM 10 , 20 TO 10 , 01 DestMap 02.
+FROM 20 , 04 TO 01 , 05 DestMap 03.
 END!
