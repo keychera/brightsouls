@@ -53,6 +53,10 @@
      - Added new adt
      - Changed currentAct variable type in battle_engage from infotype to array of char
      - Edited (infotype* X) argument in Pop procedure to (infotype X) to avoid double pointer error 
+
+* **Using MakeFile:**
+	 - run command "make" on main_dir
+     - run "./brightsouls"
  
 * **Compiling Command:**
 ```bash
