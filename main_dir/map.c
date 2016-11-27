@@ -389,7 +389,7 @@ char IntToChar(int X){
 
 void ImportCurMap(infotypeSubMap X)
 {
-	int i,j;
+	int i,j, chance;
 	char C;
 	FILE *filex;
 	filex = fopen (FileMap,"r");
@@ -408,7 +408,20 @@ void ImportCurMap(infotypeSubMap X)
 			ImportEnemy();
 		}
 		else{
-			spawn(&CurMap,5);
+			srand(time(NULL));
+			chance = (rand() % 100) + 1;
+			if (chance <= 40) {
+				spawn(&CurMap,3);
+			}
+			else if (chance <= 70) {
+				spawn(&CurMap,4);
+			}
+			else if (chance <= 90) {
+				spawn(&CurMap,5);
+			}
+			else {
+				spawn(&CurMap,6);
+			}
 			MelistEnemyBaru();
 		}
 	}
@@ -543,6 +556,7 @@ void Move(float X, float Y){
 						printf("apparently you found a bug!\n  this isn't supposed to be printed.\n");
 				}
 				if(battle_outcome==1){
+					srand(time(NULL));
 					if(rand()%5==1){
 						Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp))='M';
 					}
