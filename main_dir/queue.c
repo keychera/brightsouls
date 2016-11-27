@@ -104,8 +104,7 @@ void printQ(Queue *Q)
 	n = NBElmtQueue(*Q);
 	for(i = 1;i <= n;i++) {
 		Del(&*Q,&x);
-		printf("%d. %c | ",i,x);
-		printf("head idx %c |",Head(*Q));
-		printf(" tail idx %c\n",Tail(*Q));
+		printf(" %c | ",x);
 	}
+	printf("\n");
 }
