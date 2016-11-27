@@ -2,15 +2,16 @@
 #include "header_dir//brightsoul.h"
 #include "header_dir/map.h"
 #include "header_dir/skill.h"
-//battle purposes - key edit
 #include "header_dir/battle.h" 
 #include "header_dir/monsterdb.h"
+#include "header_dir/jam.h"
 
 #define FileMap "data_dir/map.txt"
 #define FileMapSave "data_dir/mapsave.txt"
 #define FileMapSaveDefault "data_dir/DefaultMap.txt"
 #define FilePlayerSave "data_dir/playersave.dat"
 #define FileEnemySave "data_dir/enemysave.txt"
+#define FileTime "data_dir/TimeSave.dat"
 
 /*********************/
 /*****LIST SUBMAP*****/
@@ -18,25 +19,24 @@
 
 void PrintInfoSubMap(ListSubMap L){
 	addressSubMap P;
-	printf("////////////////\n");
+	addressTele PTel;
 	P=First(L);
 	while(P!=Nil){
 		printf("Info:%d Tele:",Info(P));
 		if(First(Tele(P))==Nil){
-			printf("Tidak ada ");
+			printf("Tidak ada\n");
 		}
 		else{
-			printf("Ada ");
+			printf("Ada\n");
+			PTel=First(Tele(P));
+			while(PTel!=Nil){
+				printf("-From:%.0f,%.0f To:%.0f,%.0f Destination:%d\n",Absis(From(PTel)),Ordinat(From(PTel)),Absis(To(PTel)),Ordinat(To(PTel)),Info(Destination(PTel)));
+				PTel=Next(PTel);
+			}
 		}
-		if(Next(P)==Nil){
-			printf("Tidak lanjut \n");
-		}
-		else{
-			printf("Lanjut \n");
-		}
+		
 		P=Next(P);
 	}
-	printf("////////////////");
 }
 boolean IsEmptySubMap(ListSubMap L)
 {
@@ -543,7 +543,7 @@ void Move(float X, float Y){
 						printf("apparently you found a bug!\n  this isn't supposed to be printed.\n");
 				}
 				if(battle_outcome==1){
-					if(rand()%2==1){
+					if(rand()%5==1){
 						Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp))='M';
 					}
 					else{
@@ -589,7 +589,7 @@ void HelpMenu(){
 	printf(GRN"GD"WHT);
 	printf(": Move down\n");
 	printf(CYN"SKILL"WHT);
-	printf(": Open skill tree\n");
+	printf("bl: Open skill tree\n");
 	printf(BLU"SAVE"WHT);
 	printf(": Save the current game\n");
 	printf(BLU"LOAD"WHT);
@@ -1013,6 +1013,32 @@ void Load(boolean Default){
 	*/
 }
 
+void SaveTime(){
+	FILE *save;
+	time_t Current;
+	struct tm * timeinfo;
+	time(&Current);
+	timeinfo = localtime (&Current);
+	Hour(Time) = timeinfo->tm_hour;
+	Minute(Time) = timeinfo->tm_min;
+	Second(Time) = timeinfo->tm_sec;
+	
+	save = fopen(FileTime,"w");
+	
+	fwrite(&Time,sizeof(JAM),1,save);
+	fclose(save);
+}
+	
+void LoadTime(){
+	FILE *load;
+	
+	load = fopen(FileTime,"r");
+	fread(&Time,sizeof(JAM),1,load);
+	
+	fclose(load);
+	
+}	
+
 
 
 /**********************/
@@ -1021,6 +1047,7 @@ void Load(boolean Default){
 void Game(boolean New){
 	int HelpCount,i,j;
 	char *a;
+	char sure;
 	addressSubMap CurSubMapTemp;
 	
 	Defeat=false;
@@ -1060,15 +1087,33 @@ void Game(boolean New){
 			Move(1,0);
 		}
         else if(!mystrcmp(a,"SAVE")){
-			SaveMap();
-			SavePlayerState();
-			SaveEnemyList();
+			LoadTime();
+			printf("Are you sure you want to overwrite your last save at %d:%d:%d?\nY/N\n",Hour(Time),Minute(Time),Second(Time));
+			scanf("%s",&sure);
+			while(sure!='Y' && sure!='N'){
+				printf("Y/N\n");
+				scanf("%s",&sure);
+			}
+			if(sure=='Y'){
+				SaveTime();
+				SaveMap();
+				SavePlayerState();
+				SaveEnemyList();
+			}
 		}
 		else if(!mystrcmp(a,"LOAD")){
-			Load(false);
-			LoadPlayerState();
-			LoadEnemyList();
-			PrintListEnemy(LEnemy);
+			LoadTime();
+			printf("You are going to load your save from %d:%d:%d. Are you sure?\nY/N\n",Hour(Time),Minute(Time),Second(Time));
+			scanf("%s",&sure);
+			while(sure!='Y' && sure!='N'){
+				printf("Y/N\n");
+				scanf("%s",&sure);
+			}
+			if(sure=='Y'){
+				Load(false);
+				LoadPlayerState();
+				LoadEnemyList();
+			}
 		}
 		else if (!mystrcmp(a,"SKILL")) {
             SkillMenu();
@@ -1111,11 +1156,11 @@ void Game(boolean New){
 			HelpCount=0;
 		
 		}
-        else if(!mystrcmp(a,"SAVE")){
+        else if(!mystrcmp(a,"SAVE") && sure=='Y'){
 			printf("Saved\n");
 			HelpCount=0;
 		}
-		else if(!mystrcmp(a,"LOAD")){
+		else if(!mystrcmp(a,"LOAD") && sure=='Y'){
 			printf("Loaded\n");
 			HelpCount=0;
 		}

@@ -87,6 +87,7 @@ int main() {
 				Skill = ImportTree("data_dir/tree.txt");
 				Player.Spoint = 0;
 				Game(true);
+				InputValid = false;
 			}
 			else
 			{

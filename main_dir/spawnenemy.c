@@ -2,8 +2,8 @@
 #include "header_dir/map.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "matriks.h"
-#include "boolean.h"
+#include "header_dir/matriks.h"
+#include "header_dir/boolean.h"
 #include <time.h>
 void spawn(MATRIKS *m, int e)
 {
