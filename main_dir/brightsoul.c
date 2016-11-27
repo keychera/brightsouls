@@ -28,16 +28,22 @@ int main() {
 	do{
 		//clearscreen
 		clear();
-		printf("BrightSoul 0.0.1\n");
-		for (i=0;i<=12;i++)
-		{printf("*");}
-		printf("\n");
-		printf("[1] New Game\n");
-		printf("[2] Start Game\n");
-		printf("[3] Load Game\n");
-		printf("[4] Exit Game\n");
-		for (i=0;i<=12;i++)
-		{printf("*");}
+        printf(" __________________________________________________________________________________\n");
+        printf("|   / \\                                                                            |\n");
+        printf("|   | |   ____________ _____ _____  _   _ _____ _____  _____ _   _ _      _____    |\n");
+        printf("|   |.|   | ___ \\ ___ \\_   _|  __ \\| | | |_   _/  ___||  _  | | | | |    /  ___|   |\n");
+        printf("|   |.|   | |_/ / |_/ / | | | |  \\/| |_| | | | \\ `--. | | | | | | | |    \\ `--.    |\n");
+        printf("|   |:|   | ___ \\    /  | | | | __ |  _  | | |  `--. \\| | | | | | | |     `--. \\   |\n");
+        printf("|   |:|   | |_/ / |\\ \\ _| |_| |_\\ \\| | | | | | /\\__/ /\\ \\_/ / |_| | |____/\\__/ /   |\n");
+        printf("| `--8--` \\____/\\_| \\_|\\___/ \\____/\\_| |_/ \\_/ \\____/  \\___/ \\___/\\_____/\\____/    |\n");
+        printf("|    0                                                                             |\n");
+        printf("|    0                                                                             |\n");
+        printf("|                                                                                  |\n");
+        printf("|                                [1] New Game                                      |\n");
+        printf("|                                [2] Start Game                                    |\n");
+        printf("|                                [3] Load Game                                     |\n");
+        printf("|                                [4] Exit Game                                     |\n");
+        printf("|__________________________________________________________________________________|\n");
 		printf("\n");
 		//key edit - message preserve to make it compatible with clear screen
 		switch (message) {
