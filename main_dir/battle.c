@@ -100,7 +100,7 @@ int battle_conclude(int roundMax){
         battle_display(0);
         while(getchar() != '\n');
 		battle_ongoing = false;
-		return 2;		
+		return 2;
 	}
 }
 
@@ -457,7 +457,7 @@ void battle_calculateImpact(int* outcome){
 		//case 2,4,5 doesn't affect both sides, no damage done
 		case 1	:
 		case 9	:
-				if (player_str != enemy_str) {	
+				if (player_str != enemy_str) {
 					damageDone = aboveZero(player_str - enemy_def);
 					enemy_hp -= damageDone;
 					damageDone2 = aboveZero(enemy_str - player_def);
@@ -493,7 +493,7 @@ void battle_narrate(char narrateType,int outcome){
 		reader_openFile("data_dir/battle_narration.txt");
 		char* battleStatus[5]; 	//passing reference for reader_build
 								//where 0 : player name 1 : enemy name 2 : damageDone
-		
+
 		battleStatus[0] = player_name;
 		battleStatus[1] = enemy_name;
 		char intToStr[strlength],intToStr2[strlength];
@@ -501,7 +501,7 @@ void battle_narrate(char narrateType,int outcome){
 		battleStatus[2] = intToStr;
 		sprintf(intToStr2,"%d",damageDone2);
 		battleStatus[3] = intToStr2;
-		
+
 		char code[strlength],sentence[strlength];
 		switch(outcome) {
 			case 1 : mystrcpy(code,"ava");break;
@@ -577,20 +577,20 @@ int battle_compareAct(char proponent,char opponent){
 			}
 		} else { //the player is not dead, but the enemy is
 			switch (proponent) {
-				case 'A' :out = 10; break; 
+				case 'A' :out = 10; break;
 				case 'B' :out = 11; break;
 				case 'F' :out = 12; break;
 				//default:
-			} 
+			}
 		}
 	} else { //the player is dead
 		if (enemy_hp > 0) {
 			switch (opponent) {
-				case 'A' :out = 14; break; 
+				case 'A' :out = 14; break;
 				case 'B' :out = 15; break;
 				case 'F' :out = 16; break;
 				//default:
-			} 
+			}
 		} else { //both player and enemy is dead
 			out = 13;
 		}
@@ -620,6 +620,5 @@ void battle_showAction(Queue currentAct){
 
 
 int isBoss(int id){
-//NOT IMPLEMENTED
-	return false;
+	return (id == 7);
 }
