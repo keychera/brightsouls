@@ -5,4 +5,4 @@
 0004 | hound    | 18 | 16 | 6  | 150  | AFAF | BAAA | AAAA | FFFA | FAAF | BAAB | ABFA | BABA | BFAA | AABA .
 0005 | golem    | 30 | 10 | 12 | 200  | BBAB | BFBB | BBAF | ABBB | BBAF | FBBA | BAAB | BFBA | BFAB | BFAB .
 0006 | vampire  | 25 | 20 | 7  | 200  | AFAB | BAFA | AABA | AFBA | BAAF | AAAB | ABFA | AABA | BFAA | AAAA .
-0007 | darklord | 100| 50 | 30 | 1000 | AAAA | BBBB | AABF | AFAA | AAAF | ABAA | AABA | AFBA | BFAA | AAAB | AFAB | BAFA | AABA | AFBA | BAAF | AAAB | ABFA | AABA | BFAA | AAAA.!
+0007 | darklord | 100 | 50 | 30 | 1000 | AAAA | BBBB | AABF | AFAA | AAAF | ABAA | AABA | AFBA | BFAA | AAAB | AFAB | BAFA | AABA | AFBA | BAAF | AAAB | ABFA | AABA | BFAA | AAAA .!

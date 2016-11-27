@@ -19,6 +19,7 @@ int main()
         CreateEmptyStack(&action);
         en = GetEnemy(i,1);
         printf("%s\n", en.Nama);
+        printf("%d %d %d\n",en.HP,en.STR,en.DEF);
         if (i != 7)
         {
             for(j = 0; j < 10; j++)

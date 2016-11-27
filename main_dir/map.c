@@ -2,7 +2,7 @@
 #include "header_dir//brightsoul.h"
 #include "header_dir/map.h"
 #include "header_dir/skill.h"
-#include "header_dir/battle.h" 
+#include "header_dir/battle.h"
 #include "header_dir/monsterdb.h"
 #include "header_dir/jam.h"
 
@@ -34,7 +34,7 @@ void PrintInfoSubMap(ListSubMap L){
 				PTel=Next(PTel);
 			}
 		}
-		
+
 		P=Next(P);
 	}
 }
@@ -225,11 +225,11 @@ addressEnemy AlokasiEnemy(POINT Pos, int Id,int Level,int Map)
 	Ordinat(To)=Id;
 	Absis(To)=Level;
 	PMap=SearchSubMap(LMap,Map);
-	
-	
+
+
 	PEnemy=AlokasiTele(Pos,To,PMap);
 	return PEnemy;
-	
+
 }
 
 void DealokasiEnemy(addressEnemy E){
@@ -239,7 +239,7 @@ void DealokasiEnemy(addressEnemy E){
 void InsVFirstEnemy(ListEnemy *L, POINT Pos, int Id,int Level, int Map)
 {
 	addressEnemy PEnemy;
-	
+
 	PEnemy=AlokasiEnemy(Pos,Id,Level,Map);
 	if(PEnemy!=Nil){
 		Next(PEnemy)=First(*L);
@@ -260,7 +260,7 @@ void DeleteEnemy(ListEnemy *L, addressEnemy P){
 	else{
 		Next(Prec)=Next(PTemp);
 	}
-	
+
 	DealokasiEnemy(PTemp);
 }
 
@@ -268,7 +268,7 @@ boolean SearchMapEnemy(ListEnemy L, int Map)
 {
 	addressEnemy P;
 	boolean found;
-	
+
 	found=false;
 	P=First(L);
 	while(!found && P != Nil){
@@ -279,7 +279,7 @@ boolean SearchMapEnemy(ListEnemy L, int Map)
 			P=Next(P);
 		}
 	}
-	
+
 	return P!=Nil;
 }
 
@@ -287,7 +287,7 @@ addressEnemy SearchPosEnemy(ListEnemy L, POINT Pos, int Map)
 {
 	addressEnemy P;
 	boolean found;
-	
+
 	found=false;
 	P=First(L);
 	while(!found && P != Nil){
@@ -298,13 +298,13 @@ addressEnemy SearchPosEnemy(ListEnemy L, POINT Pos, int Map)
 			P=Next(P);
 		}
 	}
-	
+
 	return P;
 }
 
 void PrintListEnemy(ListEnemy L){
 	addressEnemy P;
-	
+
 	P=First(L);
 	while(P != Nil){
 		printf("Id:%.0f ",Id(P));
@@ -329,7 +329,7 @@ void MelistEnemyBaru(){
 
 void ImportEnemy(){
 	addressEnemy P;
-	
+
 	P=First(LEnemy);
 	while(P!=Nil){
 		if(Map(P)==CurSubMap){
@@ -422,7 +422,7 @@ void PrintCurMap(){
     clear();
 	int i,j,k,C;
 	printf(RESET" ___________________________________________________________________________________\n");
-	
+
 	for(i=1;i<=NBrsEff(CurMap);i++){
 		if(i==1){
 			printf("|%s",Player.Nama);
@@ -430,7 +430,7 @@ void PrintCurMap(){
 				printf(" ");
 			}
 		}
-		
+
 		else if(i==2){
 			printf("|HP");
 			C=floor((Player.HP)*39/Player.maxHP);
@@ -446,13 +446,13 @@ void PrintCurMap(){
 			for(k=1;k<=C;k++){
 				printf("/");
 			}
-			
+
 			printf(RESET);
 			for(k=1;k<=39-C;k++){
 				printf("-");
 			}
 		}
-		
+
 		else if(i==3){
 			printf("|  ");
 			printf(BLU"%d/%d",Player.HP,Player.maxHP);
@@ -483,7 +483,7 @@ void PrintCurMap(){
 				printf(" ");
 			}
 			printf(RESET);
-			
+
 		}
 		else{
 			printf("|                                         ");
@@ -512,7 +512,7 @@ void PrintCurMap(){
 		}
 		printf(" |\n");
 	}
-	
+
 	printf("|_________________________________________|_________________________________________|\n");
 }
 
@@ -520,7 +520,7 @@ void Move(float X, float Y){
 	POINT PTemp,PWas;
 	addressTele PTele;
 	addressEnemy PEnemy;
-	
+
 	Absis(PWas)=Absis(PlayerPos);
 	Ordinat(PWas)=Ordinat(PlayerPos);
 	Absis(PTemp)=Absis(PlayerPos)+X;
@@ -616,9 +616,9 @@ void Jump(){
 /*********************/
 void SavePlayerState(){
 	FILE *save;
-	
+
 	save = fopen(FilePlayerSave,"w");
-	
+
 	fwrite(&Player,sizeof(PlayerStat),1,save);
 	fclose(save);
 }
@@ -626,19 +626,19 @@ void SavePlayerState(){
 void LoadPlayerState(){
 	FILE *load;
 	PlayerStat PTemp;
-	
+
 	load = fopen(FilePlayerSave,"r");
 	fread(&PTemp,sizeof(PlayerStat),1,load);
-	
+
 	Player=PTemp;
-	
+
 }
 
 void SaveEnemyList(){
 	FILE *save;
 	addressEnemy PEnemy;
 	int Id,X,Y,Level,Map;
-	
+
 	save = fopen(FileEnemySave,"w");
 	PEnemy=First(LEnemy);
 	while(PEnemy!=Nil){
@@ -651,60 +651,60 @@ void SaveEnemyList(){
 		fprintf(save,"%c%c ",(Level/10)+'0',(Level%10)+'0');
 		Map=(int)Info(Map(PEnemy));
 		fprintf(save,"%c%c\n",(Map/10)+'0',(Map%10)+'0');
-		
+
 		PEnemy=Next(PEnemy);
 	}
 	fprintf(save,"!");
-	
+
 	fclose(save);
-	
+
 }
 
 void LoadEnemyList(){
 	POINT Pos;
 	int Id, Level, Map;
-	
+
 	CreateEmptyEnemy(&LEnemy);
-	
+
 	START(FileEnemySave);
 	while(CC!='!'){
 		Id=CC-'0';
 		ADV();
 		Id=10*Id+(CC-'0');
-		
+
 		ADV();
 		ADV();
-		
+
 		Absis(Pos)=CC-'0';
 		ADV();
 		Absis(Pos)=10*Absis(Pos)+(CC-'0');
-		
+
 		ADV();
 		ADV();
-		
+
 		Ordinat(Pos)=CC-'0';
 		ADV();
 		Ordinat(Pos)=10*Ordinat(Pos)+(CC-'0');
-		
+
 		ADV();
 		ADV();
-		
+
 		Level=CC-'0';
 		ADV();
 		Level=10*Level+(CC-'0');
-		
+
 		ADV();
 		ADV();
-		
+
 		Map=CC-'0';
 		ADV();
 		Map=10*Map+(CC-'0');
-		
+
 		InsVFirstEnemy(&LEnemy,Pos,Id,Level,Map);
-		
+
 		ADV();
 		ADV();
-		
+
 	}
 }
 
@@ -713,9 +713,9 @@ void SaveMap(){
 	addressSubMap PMap;
 	addressTele PTele;
 	int i;
-	
+
 	save = fopen(FileMapSave,"w");
-	
+
 	fprintf(save,"PlayerPosition:.\n");
 	i=Info(CurSubMap);
 	fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
@@ -723,7 +723,7 @@ void SaveMap(){
 	fprintf(save,"%c%c ",(i / 10)+'0',(i % 10)+'0');
 	i=(int) Ordinat(PlayerPos);
 	fprintf(save,"%c%c.\n",(i / 10)+'0',(i % 10)+'0');
-	
+
 	fprintf(save,"List Map:.\n");
 	PMap=First(LMap);
 	while(PMap!=Nil){
@@ -732,7 +732,7 @@ void SaveMap(){
 		PMap=Next(PMap);
 	}
 	fprintf(save,".\n");
-	
+
 	fprintf(save,"Koneksi Map:.\n");
 	PMap=First(LMap);
 	while(PMap!=Nil){
@@ -752,19 +752,19 @@ void SaveMap(){
 			fprintf(save,"DestMap %c%c.\n",(i / 10)+'0',(i % 10)+'0');
 			PTele=Next(PTele);
 		}
-		
+
 		PMap=Next(PMap);
 	}
-	
+
 	fprintf(save,"END!");
-	
+
 	fclose(save);
 }
 
 void LoadPre(){
 	Kata C;
 	int i;
-	
+
 	i=1;
 	STARTKATA(FileMapSave);
 	while(!EndFile){
@@ -774,8 +774,8 @@ void LoadPre(){
 		ADVKATA();
 		i++;
 		}
-	
-	
+
+
 }
 
 void Load(boolean Default){
@@ -784,42 +784,42 @@ void Load(boolean Default){
 	int i;
 	addressSubMap PMap,DestTemp;
 	POINT FromTemp,ToTemp;
-	
-	
+
+
 	Val=(char*) malloc(2 * sizeof(char));
-	
+
 	if(Default){
 		STARTKATA(FileMapSaveDefault);
 	}else{
 		STARTKATA(FileMapSave);
 	}
-	
-	
+
+
 	ADVKATA();
-	
-	ADVKATA();	
+
+	ADVKATA();
 	KataToString(CKata,Val);
 	i=10*(Val[0]-'0')+(Val[1]-'0');
 	CurInfo=i;
-	
-	ADVKATA();	
+
+	ADVKATA();
 	KataToString(CKata,Val);
 	i=10*(Val[0]-'0')+(Val[1]-'0');
 	Absis(PlayerPos)=i;
-	
-	ADVKATA();	
+
+	ADVKATA();
 	KataToString(CKata,Val);
 	i=10*(Val[0]-'0')+(Val[1]-'0');
 	Ordinat(PlayerPos)=i;
 	ADVKATA();
-	
-	
-	
-	
+
+
+
+
 	ADVKATA();
 	ADVKATA();
 	ADVKATA();
-	
+
 	ADVKATA();
 	while(CC!='.'){
 		KataToString(CKata,Val);
@@ -830,11 +830,11 @@ void Load(boolean Default){
 	KataToString(CKata,Val);
 	i=10*(Val[0]-'0')+(Val[1]-'0');
 	InsVFirstSubMap(&LMap,i);
-	
-	
+
+
 	CurSubMap=SearchSubMap(LMap,CurInfo);
-	
-	
+
+
 	ADVKATA();
 	while(CC!='.'){
 		ADVKATA();
@@ -843,7 +843,7 @@ void Load(boolean Default){
 		ADVKATA();
 		ADVKATA();
 		ADVKATA();
-	
+
 		while(CKata.TabKata[1]!='E'){
 			ADVKATA();
 			KataToString(CKata,Val);
@@ -852,7 +852,7 @@ void Load(boolean Default){
 			ADVKATA();
 			ADVKATA();
 			ADVKATA();
-			
+
 			while(CKata.TabKata[1]!='M' && CKata.TabKata[1]!='E'){
 			ADVKATA();
 			KataToString(CKata,Val);
@@ -863,7 +863,7 @@ void Load(boolean Default){
 			KataToString(CKata,Val);
 			i=10*(Val[0]-'0')+(Val[1]-'0');
 			Ordinat(FromTemp)=i;
-			
+
 			ADVKATA();
 			ADVKATA();
 			KataToString(CKata,Val);
@@ -874,67 +874,67 @@ void Load(boolean Default){
 			KataToString(CKata,Val);
 			i=10*(Val[0]-'0')+(Val[1]-'0');
 			Ordinat(ToTemp)=i;
-			
+
 			ADVKATA();
 			ADVKATA();
 			KataToString(CKata,Val);
 			i=10*(Val[0]-'0')+(Val[1]-'0');
 			DestTemp=SearchSubMap(LMap,i);
-			
-			
+
+
 			ADVKATA();
 			ADVKATA();
-		
+
 			InsVFirstTele(&Tele(PMap),FromTemp,ToTemp,DestTemp);
 			}
-		
-	}
-	
 
-	
+	}
+
+
+
 	/*Versilama
 	FILE *load;
 	int i,CurInfo;
 	char C;
 	addressSubMap PMap,DestTemp;
 	POINT FromTemp,ToTemp;
-	
+
 	CreateEmptySubMap(&LMap);
-	
+
 	if(Default){
 		load=fopen(FileMapSaveDefault,"r");
 	}
 	else{
 		load=fopen(FileMapSave,"r");
 	}
-	
+
 	for(i=1;i<=16;i++){
 		fscanf(load,"%c",&C);
 	}
-	
+
 	fscanf(load,"%c",&C);
 	i=C-'0';
 	fscanf(load,"%c",&C);
 	CurInfo=(i*10)+(C-'0');
-	
+
 	fscanf(load,"%c",&C);
 	fscanf(load,"%c",&C);
 	i=C-'0';
 	fscanf(load,"%c",&C);
 	Absis(PlayerPos)=(i*10)+(C-'0');
-	
+
 	fscanf(load,"%c",&C);
 	fscanf(load,"%c",&C);
 	i=C-'0';
 	fscanf(load,"%c",&C);
 	Ordinat(PlayerPos)=(i*10)+(C-'0');
-	
-	
+
+
 	for(i=1;i<=11;i++){
 		fscanf(load,"%c",&C);
 	}
-	
-	
+
+
 	fscanf(load,"%c",&C);
 	while(C=='0'){
 		i=C-'0';
@@ -944,14 +944,14 @@ void Load(boolean Default){
 		fscanf(load,"%c",&C);
 		fscanf(load,"%c",&C);
 	}
-	
+
 	CurSubMap=SearchSubMap(LMap,CurInfo);
-	
+
 	for(i=1;i<=13;i++){
 		fscanf(load,"%c",&C);
 	}
-	
-	
+
+
 	fscanf(load,"%c",&C);
 	while(C=='M'){
 		fscanf(load,"%c",&C);
@@ -1022,22 +1022,22 @@ void SaveTime(){
 	Hour(Time) = timeinfo->tm_hour;
 	Minute(Time) = timeinfo->tm_min;
 	Second(Time) = timeinfo->tm_sec;
-	
+
 	save = fopen(FileTime,"w");
-	
+
 	fwrite(&Time,sizeof(JAM),1,save);
 	fclose(save);
 }
-	
+
 void LoadTime(){
 	FILE *load;
-	
+
 	load = fopen(FileTime,"r");
 	fread(&Time,sizeof(JAM),1,load);
-	
+
 	fclose(load);
-	
-}	
+
+}
 
 
 
@@ -1049,14 +1049,14 @@ void Game(boolean New){
 	char *a;
 	char sure;
 	addressSubMap CurSubMapTemp;
-	
+
 	Defeat=false;
 	HelpCount=0;
 	CreateEmptyEnemy(&LEnemy);
 
 	NBrsEff(CurMap)=20;
 	NKolEff(CurMap)=20;
-	
+
 	a=(char*) malloc (10* sizeof(char));
 	if(New){
 		printf("New\n");
@@ -1130,7 +1130,7 @@ void Game(boolean New){
 		else if (!mystrcmp(a,"JUMP")) {
             Jump();
 		}
-		
+
 		if(CurSubMapTemp!=CurSubMap){
 			ImportCurMap(Info(CurSubMap));
 			CurSubMapTemp=CurSubMap;
@@ -1154,7 +1154,7 @@ void Game(boolean New){
 		}
 		else if (!mystrcmp(a,"SKILL")) {
 			HelpCount=0;
-		
+
 		}
         else if(!mystrcmp(a,"SAVE") && sure=='Y'){
 			printf("Saved\n");
@@ -1172,7 +1172,7 @@ void Game(boolean New){
 			printf("NOT GOING ANYWHERE\n");
 			HelpCount++;
 		}
-		
+
 		if(HelpCount>=3){
 			printf("type HELP for the list of commands\n");
 		}
