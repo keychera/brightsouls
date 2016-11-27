@@ -89,13 +89,13 @@ int main() {
 				Player.Spoint = 0;
 				Game(true);
                 clear();
-                printf("                            Credit :\n");
-                printf("                 Kevin Erdiza Yogatama - 13515016\n");
-                printf("                Kevin Jonathan Koswara - 13515052\n");
-                printf("                 Afif Bambang Prasetya - 13515058\n");
-                printf("                       Winarto - 13515061\n");
-                printf("                  Lazuardi Firdaus - 13515136\n");
-                printf("\n\nPress ENTER to continue\n");
+                printf("                            "RED"Credit :\n");
+                printf("                 "YEL"Kevin Erdiza Yogatama - 13515016\n");
+                printf("                "GRN"Kevin Jonathan Koswara - 13515052\n");
+                printf("                 "BLU"Afif Bambang Prasetya - 13515058\n");
+                printf("                       "CYN"Winarto - 13515061\n");
+                printf("                  "MAG"Lazuardi Firdaus - 13515136\n");
+                printf(RESET"\n\nPress ENTER to continue\n");
                 while (getchar() != '\n');
 				InputValid = false;
 			}
@@ -113,13 +113,13 @@ int main() {
 			//load
 			Game(false);
 			clear();
-            printf("                            Credit :\n");
-            printf("                 Kevin Erdiza Yogatama - 13515016\n");
-            printf("                Kevin Jonathan Koswara - 13515052\n");
-            printf("                 Afif Bambang Prasetya - 13515058\n");
-            printf("                       Winarto - 13515061\n");
-            printf("                  Lazuardi Firdaus - 13515136\n");
-            printf("\n\nPress ENTER to continue\n");
+            printf("                            "RED"Credit :\n");
+            printf("                 "YEL"Kevin Erdiza Yogatama - 13515016\n");
+            printf("                "GRN"Kevin Jonathan Koswara - 13515052\n");
+            printf("                 "BLU"Afif Bambang Prasetya - 13515058\n");
+            printf("                       "CYN"Winarto - 13515061\n");
+            printf("                  "MAG"Lazuardi Firdaus - 13515136\n");
+            printf(RESET"\n\nPress ENTER to continue\n");
             while (getchar() != '\n');
 			message = 0;
 			InputValid = false; //key edit for looping instead of exiting
@@ -141,13 +141,13 @@ int main() {
             Player.Spoint = 999;
             Game(true);
             clear();
-            printf("                            Credit :\n");
-            printf("                 Kevin Erdiza Yogatama - 13515016\n");
-            printf("                Kevin Jonathan Koswara - 13515052\n");
-            printf("                 Afif Bambang Prasetya - 13515058\n");
-            printf("                       Winarto - 13515061\n");
-            printf("                  Lazuardi Firdaus - 13515136\n");
-            printf("\n\nPress ENTER to continue\n");
+            printf("                            "RED"Credit :\n");
+            printf("                 "YEL"Kevin Erdiza Yogatama - 13515016\n");
+            printf("                "GRN"Kevin Jonathan Koswara - 13515052\n");
+            printf("                 "BLU"Afif Bambang Prasetya - 13515058\n");
+            printf("                       "CYN"Winarto - 13515061\n");
+            printf("                  "MAG"Lazuardi Firdaus - 13515136\n");
+            printf(RESET"\n\nPress ENTER to continue\n");
             while (getchar() != '\n');
         }
 		else if (input != 4)
