@@ -7,7 +7,7 @@ OBJECTS=$(SOURCES:.c=.o)
 MAIN=./brightsoul.c
 EXECUTABLE=./brightsouls
 
-.PHONY: all bin test clean
+.PHONY: all bin clean
 
 
 all: bin

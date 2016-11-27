@@ -16,6 +16,8 @@ void LearnSkill();
 /* Menu Learn skill */
 void UpgradeSkill();
 /* Menu Upgade Skill */
+void HelpSkill();
+/* Menu untuk help */
 void SkillMenu();
 /* menu yang memproses interface skill */
 

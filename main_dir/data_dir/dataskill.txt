@@ -1,13 +1,13 @@
 Newbie | HP 5.
-Knight | STR 5.
-Spell Caster | DEF 5.
-Prince | DEF 5.
-Swordsman | STR 10.
+Knight | STR 1.
+Spell Caster | DEF 1.
+Prince | DEF 1.
+Swordsman | STR 2.
 Priest | HP 10.
-Mage | DEF 10.
-Palladin | DEF 20.
-Warrior | DEF 10.
-Master Sowrdsman | STR 20.
+Mage | DEF 2.
+Palladin | DEF 4.
+Warrior | DEF 2.
+Master Sowrdsman | STR 4.
 Arch Priest | HP 20.
-Battlemage | STR 10.
+Battlemage | STR 2.
 Arch Mage | HP 20!

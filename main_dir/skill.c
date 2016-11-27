@@ -104,7 +104,7 @@ void PrintSubTree(addressT P, int n, int a[])
                 break;
             }
         }
-        printf(" : +%d%%\n" RESET,DataSkill[Info(P)].Change*Level(Cari));
+        printf(" : +%d\n" RESET,DataSkill[Info(P)].Change*Level(Cari));
     }
     else {
         printf(RED "%2d. ",Info(P));
@@ -124,7 +124,7 @@ void PrintSubTree(addressT P, int n, int a[])
                 break;
             }
         }
-        printf(" : +%d%%)\n" RESET,DataSkill[Info(P)].Change);
+        printf(" : +%d)\n" RESET,DataSkill[Info(P)].Change);
     }
     //REKURSIF
     if ((Left(P) != Nil) && (Right(P) != Nil)) {
@@ -163,7 +163,6 @@ void LearnSkill()
     addressS P;
     addressT T;
     infoskill X;
-    PrintSkill();
     if (Player.Spoint > 0) {
         printf("Enter skill number you want to learn : ");
         scanf("%d",&s);
@@ -177,6 +176,21 @@ void LearnSkill()
                 X.ID = s;
                 X.level = 1;
                 InsVLastS(&(Player.aqcuired),X);
+                switch (DataSkill[s].Stat) {
+                    case 0 : {
+                        Player.HP += DataSkill[s].Change;
+                        Player.maxHP += DataSkill[s].Change;
+                        break;
+                    }
+                    case 1 : {
+                        Player.STR += DataSkill[s].Change;
+                        break;
+                    }
+                    case 2 : {
+                        Player.DEF += DataSkill[s].Change;
+                        break;
+                    }
+                }
                 Player.Spoint--;
                 printf("Skill ");
                 PrintKata(DataSkill[s].Nama);
@@ -196,8 +210,6 @@ void LearnSkill()
     else {
         printf("Skill point not sufficient\n");
     }
-    printf("Press ENTER to back\n");
-    while (getchar() != '\n');
 }
 
 void UpgradeSkill()
@@ -205,7 +217,6 @@ void UpgradeSkill()
 {
     int s;
     addressS P;
-    PrintSkill();
     if (Player.Spoint > 0) {
         printf("Enter skill number you want to upgrade : ");
         scanf("%d",&s);
@@ -219,7 +230,21 @@ void UpgradeSkill()
             else {
                 Player.Spoint--;
                 Level(P) = Level(P) + 1;
-                //PLACEHOLDER stat ditambah DataSkill[ID(P)].Change
+                switch (DataSkill[ID(P)].Stat) {
+                    case 0 : {
+                        Player.HP += DataSkill[ID(P)].Change;
+                        Player.maxHP += DataSkill[ID(P)].Change;
+                        break;
+                    }
+                    case 1 : {
+                        Player.STR += DataSkill[ID(P)].Change;
+                        break;
+                    }
+                    case 2 : {
+                        Player.DEF += DataSkill[ID(P)].Change;
+                        break;
+                    }
+                }
                 printf("Skill ");
                 PrintKata(DataSkill[ID(P)].Nama);
                 printf(" upgraded\n");
@@ -233,17 +258,30 @@ void UpgradeSkill()
     else {
         printf("Skill point not sufficient\n");
     }
-    printf("Press ENTER to back\n");
-    while (getchar() != '\n');
+}
+
+void HelpSkill(){
+	printf("Command List\n\n");
+	printf(YEL"HELP"WHT);
+	printf(": Open command list menu\n");
+	printf(GRN"LEARN"WHT);
+	printf(": Learn new skill\n");
+	printf(CYN"UPGRADE"WHT);
+	printf(": Upgrade already learned skill\n");
+	printf(RED"BACK"WHT);
+	printf(": Back to map\n");
 }
 
 void SkillMenu()
 /* menu yang memproses interface skill */
 {
+    int HelpCount = 0;
+    char dummy;
     Kata command;
     Kata upgrade;
     Kata learn;
     Kata back;
+    Kata help;
     upgrade.Length = 7;
     upgrade.TabKata[1] = 'U';
     upgrade.TabKata[2] = 'P';
@@ -263,18 +301,37 @@ void SkillMenu()
     back.TabKata[2] = 'A';
     back.TabKata[3] = 'C';
     back.TabKata[4] = 'K';
+    help.Length = 4;
+    help.TabKata[1] = 'H';
+    help.TabKata[2] = 'E';
+    help.TabKata[3] = 'L';
+    help.TabKata[4] = 'P';
+    PrintSkill();
+    printf("Input command : ");
+    dummy = getchar();
+    command = InputKata();
     do {
         PrintSkill();
-        printf("Input command : ");
-        command = InputKata();
         if (IsKataSama(command,upgrade)) {
             UpgradeSkill();
+            HelpCount = 0;
         }
         else if (IsKataSama(command,learn)) {
             LearnSkill();
+            HelpCount = 0;
+        }
+        else if (IsKataSama(command,help)) {
+            HelpSkill();
+            HelpCount = 0;
         }
         else if (!IsKataSama(command,back)) {
             printf("Command not recognized\n");
+            HelpCount++;
         }
+        if(HelpCount>=3){
+			printf("type "YEL"HELP"RESET" for the list of commands\n");
+		}
+        printf("\nInput command : ");
+        command = InputKata();
     } while (!IsKataSama(command,back));
 }
