@@ -23,4 +23,3 @@ $(EXECUTABLE): $(OBJECTS)
 clean:
 	-rm $(OBJECTS)
 	-rm $(EXECUTABLE)
-
