@@ -114,9 +114,9 @@ void battle_lvlup(){
 */
     //char st[20],s[6]; this unused somehow key edit
 	Player.LVL++;
-	Player.HP += (Player.LVL%2 + 2) + (Player.LVL%2/5);
+	Player.HP += (Player.LVL%2 + 2) + (Player.LVL%5/5);
 	Player.Spoint += 1;
-	Player.maxHP += (Player.LVL%2 + 2) + (Player.LVL%2/5);
+	Player.maxHP += (Player.LVL%2 + 2) + (Player.LVL%5/5);
 	Player.STR += (Player.LVL%2 + 1) + (Player.LVL%2/5);
 	Player.DEF += (Player.LVL%2 + 1);
 	Player.maxEXP += (Player.LVL*Player.maxEXP/2);
@@ -139,7 +139,7 @@ void battle_playerLoad(char name[nameSize],int lvl, int hp, int str, int def,int
 void battle_enemyLoad(int monsterID,int monsterLVL){
 //picking random enemy data from enemy database
 //ALT pick enemy based on monster id
-	int i,j,k,r[10];
+	int i,j,k,r[20];
 	EnemyStat curEnemy;
 	curEnemy = GetEnemy(monsterID, monsterLVL); //Second argument is LVL
 	mystrcpy(enemy_name,curEnemy.Nama);
