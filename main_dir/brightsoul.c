@@ -8,9 +8,10 @@
 #include "header_dir/map.h"
 //skill header
 #include "header_dir/skill.h"
+//monster database header
+#include "header_dir/monsterdb.h"
 /*battle header, moved to map.c there is no calling this module here
-#include "header_dir/battle.h" 
-#include "header_dir/monsterdb.h"*/
+#include "header_dir/battle.h" */
 //general purpose
 //#include "mystring.h" - moved to brightsoul.h
 #include <stdio.h>
@@ -22,6 +23,7 @@ int main() {
 	int input, i;
 	int message = 0; //key edit for messages
     // start coding here
+    LoadEnemy("data_dir/MonsterDB.txt");
 	//load data?
 	do{
 		//clearscreen
@@ -68,17 +70,16 @@ int main() {
 			{
 				//setting player initial stat
 				Player.LVL = 1;
-				Player.HP = 23;
-				Player.STR = 6;
-				Player.DEF = 5;
+				Player.HP = 25;
+				Player.STR = 8;
+				Player.DEF = 7;
 				Player.EXP = 0;
 				Player.maxHP = 25;
 				Player.maxEXP = 100;
 				//initiate map
-				Load(false); //not sure with the parameter - key
 				ImportSkill();
 				Skill = ImportTree("data_dir/tree.txt");
-				Player.Spoint = 15;
+				Player.Spoint = 0;
 				Game(true);
 			}
 			else

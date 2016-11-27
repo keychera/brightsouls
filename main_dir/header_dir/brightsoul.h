@@ -59,7 +59,7 @@ SkillStat DataSkill[SMax];
 PlayerStat Player;
 ELoc Enemy[EMax];
 //CurMap Map;
-ListSubMap BigMap;
+//ListSubMap BigMap;
 Tree Skill;
 // PLACEHOLDER : <tipe_untuk_map_besar> BigMap;
 

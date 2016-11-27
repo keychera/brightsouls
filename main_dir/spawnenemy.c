@@ -1,4 +1,5 @@
 #include "header_dir/spawnenemy.h"
+#include "header_dir/map.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "header_dir/matriks.h"
@@ -15,7 +16,7 @@ void spawn(MATRIKS *m, int e)
 			for (j=GetFirstIdxKol(*m);j<GetLastIdxKol(*m);j++)
 			{
 				r = rand()%25;
-				if (r<5 && k < e && Elmt(*m,i,j)=='-') //r jumlah musuh yang di spawn
+				if (r<5 && k < e && Elmt(*m,i,j)=='-' && i!=Absis(PlayerPos) && j!= Ordinat(PlayerPos)) //r jumlah musuh yang di spawn
 				{
 					Elmt(*m,i,j) = 'E'; // key edit e to E
 					//masukin monster ke list(placeholder)

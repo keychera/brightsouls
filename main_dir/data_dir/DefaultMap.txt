@@ -1,15 +1,35 @@
 PlayerPosition:.
-01 04 04.
+01 10 10.
 List Map:.
-03 02 01 .
+09 08 07 06 05 04 03 02 01 .
 Koneksi Map:.
+MAP 09 :.
+FROM 01 , 10 TO 20 , 10 DestMap 08.
+MAP 08 :.
+FROM 20 , 10 TO 01 , 10 DestMap 09.
+FROM 11 , 01 TO 11 , 20 DestMap 07.
+FROM 10 , 01 TO 10 , 20 DestMap 07.
+MAP 07 :.
+FROM 11 , 20 TO 11 , 01 DestMap 08.
+FROM 10 , 20 TO 10 , 01 DestMap 08.
+FROM 11 , 01 TO 09 , 20 DestMap 06.
+FROM 10 , 01 TO 08 , 20 DestMap 06.
+MAP 06 :.
+FROM 09 , 20 TO 11 , 01 DestMap 07.
+FROM 08 , 20 TO 10 , 01 DestMap 07.
+FROM 01 , 10 TO 20 , 06 DestMap 04.
+MAP 05 :.
+FROM 09 , 20 TO 11 , 01 DestMap 04.
+MAP 04 :.
+FROM 20 , 06 TO 01 , 10 DestMap 06.
+FROM 11 , 01 TO 09 , 20 DestMap 05.
+FROM 11 , 20 TO 17 , 01 DestMap 03.
 MAP 03 :.
-FROM 01 , 05 TO 20 , 04 DestMap 01.
-FROM 11 , 20 TO 20 , 14 DestMap 02.
+FROM 17 , 01 TO 11 , 20 DestMap 04.
+FROM 04 , 01 TO 12 , 20 DestMap 02.
 MAP 02 :.
-FROM 10 , 01 TO 10 , 20 DestMap 01.
-FROM 20 , 14 TO 11 , 20 DestMap 03.
+FROM 12 , 20 TO 04 , 01 DestMap 03.
+FROM 01 , 05 TO 20 , 10 DestMap 01.
 MAP 01 :.
-FROM 10 , 20 TO 10 , 01 DestMap 02.
-FROM 20 , 04 TO 01 , 05 DestMap 03.
+FROM 20 , 10 TO 01 , 05 DestMap 02.
 END!

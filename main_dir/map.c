@@ -1,3 +1,4 @@
+#include <math.h>
 #include "header_dir//brightsoul.h"
 #include "header_dir/map.h"
 #include "header_dir/skill.h"
@@ -221,8 +222,8 @@ addressEnemy AlokasiEnemy(POINT Pos, int Id,int Level,int Map)
 	POINT To;
 	addressEnemy PEnemy;
 	addressSubMap PMap;
-	Absis(To)=Id;
-	Ordinat(To)=Level;
+	Ordinat(To)=Id;
+	Absis(To)=Level;
 	PMap=SearchSubMap(LMap,Map);
 	
 	
@@ -320,7 +321,7 @@ void MelistEnemyBaru(){
 	for(i=1;i<=NBrsEff(CurMap);i++){
 		for(j=1;j<=NKolEff(CurMap);j++){
 			if(Elmt(CurMap,i,j)=='E'){
-				InsVFirstEnemy(&LEnemy,MakePOINT(i,j),(rand()%2)+1,Info(CurSubMap),Info(CurSubMap));
+				InsVFirstEnemy(&LEnemy,MakePOINT(i,j),(rand() % (enemyCount-1)),Info(CurSubMap),Info(CurSubMap));
 			}
 		}
 	}
@@ -402,20 +403,92 @@ void ImportCurMap(infotypeSubMap X)
 		Elmt(CurMap,i,j)=C;
 		}
 	}
-	
-	if(SearchMapEnemy(LEnemy,Info(CurSubMap))){
-		ImportEnemy();
+	if(X!=9){
+		if(SearchMapEnemy(LEnemy,Info(CurSubMap))){
+			ImportEnemy();
+		}
+		else{
+			spawn(&CurMap,5);
+			MelistEnemyBaru();
+		}
 	}
 	else{
-		spawn(&CurMap,5);
-		MelistEnemyBaru();
+		Elmt(CurMap,10,10)='E';
+		InsVFirstEnemy(&LEnemy,MakePOINT(10,10),enemyCount-1,Info(CurSubMap),Info(CurSubMap));
 	}
 }
 
 void PrintCurMap(){
     clear();
-	int i,j;
+	int i,j,k,C;
+	printf(RESET" ___________________________________________________________________________________\n");
+	
 	for(i=1;i<=NBrsEff(CurMap);i++){
+		if(i==1){
+			printf("|%s",Player.Nama);
+			for(k=1;k<=41-mystrlen(Player.Nama);k++){
+				printf(" ");
+			}
+		}
+		
+		else if(i==2){
+			printf("|HP");
+			C=floor((Player.HP)*39/Player.maxHP);
+			if(C<=13){
+				printf(RED);
+			}
+			else if(C<=26){
+				printf(YEL);
+			}
+			else{
+				printf(GRN);
+			}
+			for(k=1;k<=C;k++){
+				printf("/");
+			}
+			
+			printf(RESET);
+			for(k=1;k<=39-C;k++){
+				printf("-");
+			}
+		}
+		
+		else if(i==3){
+			printf("|  ");
+			printf(BLU"%d/%d",Player.HP,Player.maxHP);
+			if(Player.HP<10){
+				printf("  ");
+			}
+			else if(Player.HP<100){
+				printf(" ");
+			}
+			if(Player.maxHP<10){
+				printf("  ");
+			}
+			else if(Player.maxHP<100){
+				printf(" ");
+			}
+			printf(MAG"                |STR:%d",Player.STR);
+			if(Player.STR<10){
+				printf("  ");
+			}
+			else if(Player.STR<100){
+				printf(" ");
+			}
+			printf("|DEF:%d",Player.DEF);
+			if(Player.DEF<10){
+				printf("  ");
+			}
+			else if(Player.DEF<100){
+				printf(" ");
+			}
+			printf(RESET);
+			
+		}
+		else{
+			printf("|                                         ");
+		}
+		printf("|");
 		for(j=1;j<=NKolEff(CurMap);j++){
 			printf(" ");
 			if(i==(int)Ordinat(PlayerPos) && j==(int)Absis(PlayerPos)){
@@ -437,8 +510,10 @@ void PrintCurMap(){
 				printf("%c"RESET,Elmt(CurMap,i,j));
 			}
 		}
-		printf("\n");
+		printf(" |\n");
 	}
+	
+	printf("|_________________________________________|_________________________________________|\n");
 }
 
 void Move(float X, float Y){
@@ -458,7 +533,6 @@ void Move(float X, float Y){
 				int battle_outcome;
 				//ENEMY ID NEED HANDLING, connected to Afif's spawnenemy, which I guess isn't here already
 				// EnemyStat enemy; key edit - not used
-				LoadEnemy("data_dir/MonsterDB.txt");
 				Enemy[1].ID = Id(PEnemy); //handle this
 				battle_initiate(Id(PEnemy), Lvl(PEnemy),&battle_outcome); //handle enemy id please
 				switch (battle_outcome) {
@@ -469,13 +543,21 @@ void Move(float X, float Y){
 						printf("apparently you found a bug!\n  this isn't supposed to be printed.\n");
 				}
 				if(battle_outcome==1){
-					Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp))='-';
+					if(rand()%2==1){
+						Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp))='M';
+					}
+					else{
+						Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp))='-';
+					}
 					DeleteEnemy(&LEnemy,PEnemy);
 				}
+				else if(battle_outcome==2){
+					Defeat=true;
+				}
             }
-			else if (Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) != 'M') {
-			    //medicine
+			else if (Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) == 'M') {
 			    Elmt(CurMap,(int)Ordinat(PTemp),(int)Absis(PTemp)) = '-';
+			    Player.HP=Player.maxHP;
                 Absis(PlayerPos)=Absis(PTemp);
                 Ordinat(PlayerPos)=Ordinat(PTemp);
 			}
@@ -485,7 +567,7 @@ void Move(float X, float Y){
 			}
 		}
 	}
-	if(Absis(PWas)!=Absis(PlayerPos) || Ordinat(PWas)!=Ordinat(PlayerPos)){
+	if((Absis(PWas)!=Absis(PlayerPos)) || (Ordinat(PWas)!=Ordinat(PlayerPos)) || (Y==-1 && Ordinat(PlayerPos)==1) || (Y==1 && Ordinat(PlayerPos)==20) || (X==-1 && Absis(PlayerPos)==1) || (X==1 && Absis(PlayerPos)==20)){
 		PTele=SearchPOINTTele(Tele(CurSubMap),PlayerPos);
 		if(PTele!=Nil){
 			CurSubMap=Destination(PTele);
@@ -494,6 +576,39 @@ void Move(float X, float Y){
 	}
 }
 
+void HelpMenu(){
+	printf("Command List\n\n");
+	printf(YEL"HELP"WHT);
+	printf(": Open command list menu\n");
+	printf(GRN"GL"WHT);
+	printf(": Move to the left\n");
+	printf(GRN"GR"WHT);
+	printf(": Move to the right\n");
+	printf(GRN"GU"WHT);
+	printf(": Move up\n");
+	printf(GRN"GD"WHT);
+	printf(": Move down\n");
+	printf(CYN"SKILL"WHT);
+	printf(": Open skill tree\n");
+	printf(BLU"SAVE"WHT);
+	printf(": Save the current game\n");
+	printf(BLU"LOAD"WHT);
+	printf(": Load previously saved game\n");
+	printf(RED"EXIT"WHT);
+	printf("EXIT: Quit game\n");
+}
+
+void Jump(){
+	int X,Y;
+	printf("\nAbsis:");
+	scanf("%d",&X);
+	printf("\nOrdinat:");
+	scanf("%d",&Y);
+	if(X>=1 && X<=20 && Y>=1 && Y<=20){
+		Absis(PlayerPos)=X;
+		Ordinat(PlayerPos)=Y;
+	}
+}
 
 
 /*********************/
@@ -679,6 +794,7 @@ void Load(boolean Default){
 		STARTKATA(FileMapSave);
 	}
 	
+	
 	ADVKATA();
 	
 	ADVKATA();	
@@ -706,7 +822,7 @@ void Load(boolean Default){
 	
 	ADVKATA();
 	while(CC!='.'){
-	KataToString(CKata,Val);
+		KataToString(CKata,Val);
 		i=10*(Val[0]-'0')+(Val[1]-'0');
 		InsVFirstSubMap(&LMap,i);
 		ADVKATA();
@@ -722,59 +838,59 @@ void Load(boolean Default){
 	ADVKATA();
 	while(CC!='.'){
 		ADVKATA();
-	}
-	ADVKATA();
-	ADVKATA();
-	ADVKATA();
-	ADVKATA();
-	
-	while(CKata.TabKata[1]!='E'){
-		ADVKATA();
-		KataToString(CKata,Val);
-		i=10*(Val[0]-'0')+(Val[1]-'0');
-		PMap=SearchSubMap(LMap,i);
-		ADVKATA();
-		ADVKATA();
-		ADVKATA();
-		
-		while(CKata.TabKata[1]!='M' && CKata.TabKata[1]!='E'){
-		ADVKATA();
-		KataToString(CKata,Val);
-		i=10*(Val[0]-'0')+(Val[1]-'0');
-		Absis(FromTemp)=i;
-		ADVKATA();
-		ADVKATA();
-		KataToString(CKata,Val);
-		i=10*(Val[0]-'0')+(Val[1]-'0');
-		Ordinat(FromTemp)=i;
-		
-		ADVKATA();
-		ADVKATA();
-		KataToString(CKata,Val);
-		i=10*(Val[0]-'0')+(Val[1]-'0');
-		Absis(ToTemp)=i;
-		ADVKATA();
-		ADVKATA();
-		KataToString(CKata,Val);
-		i=10*(Val[0]-'0')+(Val[1]-'0');
-		Ordinat(ToTemp)=i;
-		
-		ADVKATA();
-		ADVKATA();
-		KataToString(CKata,Val);
-		i=10*(Val[0]-'0')+(Val[1]-'0');
-		DestTemp=SearchSubMap(LMap,i);
-		
-		
-		ADVKATA();
-		ADVKATA();
-		
-		InsVFirstTele(&Tele(PMap),FromTemp,ToTemp,DestTemp);
 		}
+		ADVKATA();
+		ADVKATA();
+		ADVKATA();
+		ADVKATA();
+	
+		while(CKata.TabKata[1]!='E'){
+			ADVKATA();
+			KataToString(CKata,Val);
+			i=10*(Val[0]-'0')+(Val[1]-'0');
+			PMap=SearchSubMap(LMap,i);
+			ADVKATA();
+			ADVKATA();
+			ADVKATA();
+			
+			while(CKata.TabKata[1]!='M' && CKata.TabKata[1]!='E'){
+			ADVKATA();
+			KataToString(CKata,Val);
+			i=10*(Val[0]-'0')+(Val[1]-'0');
+			Absis(FromTemp)=i;
+			ADVKATA();
+			ADVKATA();
+			KataToString(CKata,Val);
+			i=10*(Val[0]-'0')+(Val[1]-'0');
+			Ordinat(FromTemp)=i;
+			
+			ADVKATA();
+			ADVKATA();
+			KataToString(CKata,Val);
+			i=10*(Val[0]-'0')+(Val[1]-'0');
+			Absis(ToTemp)=i;
+			ADVKATA();
+			ADVKATA();
+			KataToString(CKata,Val);
+			i=10*(Val[0]-'0')+(Val[1]-'0');
+			Ordinat(ToTemp)=i;
+			
+			ADVKATA();
+			ADVKATA();
+			KataToString(CKata,Val);
+			i=10*(Val[0]-'0')+(Val[1]-'0');
+			DestTemp=SearchSubMap(LMap,i);
+			
+			
+			ADVKATA();
+			ADVKATA();
+		
+			InsVFirstTele(&Tele(PMap),FromTemp,ToTemp,DestTemp);
+			}
 		
 	}
 	
-	
+
 	
 	/*Versilama
 	FILE *load;
@@ -903,10 +1019,12 @@ void Load(boolean Default){
 /****FINISH_PRODUCT****/
 /**********************/
 void Game(boolean New){
+	int HelpCount,i,j;
 	char *a;
 	addressSubMap CurSubMapTemp;
 	
-	
+	Defeat=false;
+	HelpCount=0;
 	CreateEmptyEnemy(&LEnemy);
 
 	NBrsEff(CurMap)=20;
@@ -914,9 +1032,11 @@ void Game(boolean New){
 	
 	a=(char*) malloc (10* sizeof(char));
 	if(New){
+		printf("New\n");
 		Load(true);
 	}
 	else{
+		printf("Old\n");
 		Load(false);
 		LoadPlayerState();
 		LoadEnemyList();
@@ -926,7 +1046,7 @@ void Game(boolean New){
 
     PrintCurMap(Player);
     scanf("%s",a);
-	while(mystrcmp(a,"EXIT")) {
+	while(mystrcmp(a,"EXIT") && !Defeat) {
 		if(!mystrcmp(a,"GU")||!mystrcmp(a,"gu")){
 			Move(0,-1);
 		}
@@ -953,9 +1073,19 @@ void Game(boolean New){
 		else if (!mystrcmp(a,"SKILL")) {
             SkillMenu();
 		}
-        else {
-			printf("NOT GOING ANYWHERE\n");
+		else if(!mystrcmp(a,"RAIGEKI")){
+			for(i=1;i<=NBrsEff(CurMap);i++){
+				for(j=1;j<=NKolEff(CurMap);j++){
+					if(Elmt(CurMap,i,j)=='E'){
+						Elmt(CurMap,i,j)='-';
+					}
+				}
+			}
 		}
+		else if (!mystrcmp(a,"JUMP")) {
+            Jump();
+		}
+		
 		if(CurSubMapTemp!=CurSubMap){
 			ImportCurMap(Info(CurSubMap));
 			CurSubMapTemp=CurSubMap;
@@ -963,28 +1093,47 @@ void Game(boolean New){
 		PrintCurMap(Player);
 		if(!mystrcmp(a,"GU")||!mystrcmp(a,"gu")){
 			printf("Going UP\n");
+			HelpCount=0;
 		}
 		else if(!mystrcmp(a,"GD")||!mystrcmp(a,"gd")){
 			printf("Going DOWN\n");
+			HelpCount=0;
 		}
 		else if(!mystrcmp(a,"GL")||!mystrcmp(a,"gl")){
 			printf("Going LEFT\n");
+			HelpCount=0;
 		}
 		else if(!mystrcmp(a,"GR")||!mystrcmp(a,"gr")){
 			printf("Going RIGHT\n");
+			HelpCount=0;
 		}
 		else if (!mystrcmp(a,"SKILL")) {
+			HelpCount=0;
+		
 		}
         else if(!mystrcmp(a,"SAVE")){
 			printf("Saved\n");
+			HelpCount=0;
 		}
 		else if(!mystrcmp(a,"LOAD")){
 			printf("Loaded\n");
+			HelpCount=0;
+		}
+		else if(!mystrcmp(a,"HELP")){
+			HelpMenu();
+			HelpCount=0;
 		}
 		else {
 			printf("NOT GOING ANYWHERE\n");
+			HelpCount++;
 		}
-		scanf("%s",a);
+		
+		if(HelpCount>=3){
+			printf("type HELP for the list of commands\n");
+		}
+		if(!Defeat){
+			scanf("%s",a);
+		}
 	}
 }
 

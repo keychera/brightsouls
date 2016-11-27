@@ -61,6 +61,7 @@ addressSubMap CurSubMap;
 POINT PlayerPos;
 ListSubMap LMap;
 ListEnemy LEnemy;
+boolean Defeat;
 
 /*Selektor*/
 #define From(P) (P)->From
@@ -189,7 +190,8 @@ void Move(float X, float Y);
 /*Memindahkan koordinat player sejauh X,Y. jika ada dinding atau batas
 terluar peta, tidak jadi pindah*/
 
-
+void HelpMenu();
+/*Membuka help menu berisi daftar command yang bisa dipanggil*/
 
 /*********************/
 /******SAVE/LOAD******/
