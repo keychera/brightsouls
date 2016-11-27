@@ -148,29 +148,56 @@ void battle_enemyLoad(int monsterID,int monsterLVL){
 	enemy_def = curEnemy.DEF;
 	enemy_reward = curEnemy.EXP;
 	CreateEmptyStack(&enemy_actions);
-	for (i = 0; i < 10; i++)
-	{
-		char *s = (char *) malloc(actionNumber + 1); //key fix for issue #4
-		j = 0;
-		srand(time(NULL));
-		r[i] = rand() % 10;
-		while (i > j){
-			if(r[i] != r[j])
-			{
-				j++;
-			} else
-			{
-				j = 0;
-				r[i] = rand() % 10;
-			}
-		}
-		s[0] = ' ';
-		for (k = 1;k <= actionNumber;k++)
-		{
-			s[k] = curEnemy.ACTION[r[i]][k-1];
-		}
-		Push(&enemy_actions, s);
-	}
+	if (!isBoss(monsterID))
+    {
+        for (i = 0; i < 10; i++)
+        {
+            char *s = (char *) malloc(actionNumber + 1); //key fix for issue #4
+            j = 0;
+            srand(time(NULL));
+            r[i] = rand() % 10;
+            while (i > j){
+                if(r[i] != r[j])
+                {
+                    j++;
+                } else
+                {
+                    j = 0;
+                    r[i] = rand() % 10;
+                }
+            }
+            s[0] = ' ';
+            for (k = 1;k <= actionNumber;k++)
+            {
+                s[k] = curEnemy.ACTION[r[i]][k-1];
+            }
+            Push(&enemy_actions, s);
+        }
+    } else {
+        for (i = 0; i < 20; i++)
+        {
+            char *s = (char *) malloc(actionNumber + 1); //key fix for issue #4
+            j = 0;
+            srand(time(NULL));
+            r[i] = rand() % 20;
+            while (i > j){
+                if(r[i] != r[j])
+                {
+                    j++;
+                } else
+                {
+                    j = 0;
+                    r[i] = rand() % 20;
+                }
+            }
+            s[0] = ' ';
+            for (k = 1;k <= actionNumber;k++)
+            {
+                s[k] = curEnemy.ACTION[r[i]][k-1];
+            }
+            Push(&enemy_actions, s);
+        }
+    }
 }
 
 void battle_engage(){

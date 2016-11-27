@@ -9,7 +9,7 @@ typedef struct EnemyStat{
     int STR;
     int DEF;
     int EXP;
-    char ACTION[10][5]; // 10 set aksi untuk masing" musuh
+    char ACTION[20][5]; // 10 set aksi untuk masing" musuh, 20 utk boss
 } EnemyStat;
 
 //DEKLARASI VARIABLE GLOBAL
