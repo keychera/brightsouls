@@ -194,7 +194,7 @@ void battle_engage(){
 void battle_display(int simulatePass){
 //displaying battle situation when input and when simulation
 //the input exclusive for void battle_simulate()
-	int sub_size = 12;
+	int sub_size = 15;
 	int name_size = 2*sub_size;
 	int display_size = ((name_size + 5*(sub_size)) + 12) ;
 	int i,j; //for intense looping right here
@@ -438,12 +438,14 @@ void battle_calculateImpact(int* outcome){
 		case 1	:
 		case 9	:
 				if (player_str != enemy_str) {	
-					damageDone = player_str - enemy_def;
+					damageDone = aboveZero(player_str - enemy_def);
 					enemy_hp -= damageDone;
-					damageDone2 = enemy_str - player_def;
+					damageDone2 = aboveZero(enemy_str - player_def);
 					player_hp -= damageDone2;
 				}
+			break;
 		case 3	:
+		case 10	:
 				damageDone = player_str;
 				enemy_hp -= damageDone;
 			break;
@@ -452,6 +454,7 @@ void battle_calculateImpact(int* outcome){
 				player_hp -= damageDone;
 			break;
 		case 7	:
+		case 14 :
 				damageDone = enemy_str;
 				player_hp -= damageDone;
 			break;
@@ -460,7 +463,7 @@ void battle_calculateImpact(int* outcome){
 				enemy_hp -= damageDone;
 			break;
 		default:
-		printf("this shouldn't be printed\n");
+			;
 	}
 }
 
@@ -490,7 +493,13 @@ void battle_narrate(char narrateType,int outcome){
 			case 7 : mystrcpy(code,"fva");break;
 			case 8 : mystrcpy(code,"fvb");break;
 			case 9 : mystrcpy(code,"fvf");break;
-			case 10: mystrcpy(code,"stl");break;
+			case 10: mystrcpy(code,"avo");break;
+			case 11: mystrcpy(code,"bvo");break;
+			case 12: mystrcpy(code,"fvo");break;
+			case 13: mystrcpy(code,"ddd");break;
+			case 14: mystrcpy(code,"ova");break;
+			case 15: mystrcpy(code,"ovb");break;
+			case 16: mystrcpy(code,"ovf");break;
 			default :
 			mystrcpy(code,"999");
 		}
@@ -520,29 +529,51 @@ int battle_compareAct(char proponent,char opponent){
 
 */
 	int out = 0;
-	switch (proponent) {
-		case 'A' :
-			switch (opponent) {
-				case 'A' :out = 1; break;
-				case 'B' :out = 2; break;
-				case 'F' :out = 3; break;
+	if (player_hp > 0) {
+		if (enemy_hp > 0) { //normal fight on a normal day
+			switch (proponent) {
+				case 'A' :
+					switch (opponent) {
+						case 'A' :out = 1; break;
+						case 'B' :out = 2; break;
+						case 'F' :out = 3; break;
+						//default:
+					} break;
+				case 'B' :
+					switch (opponent) {
+						case 'A' :out = 4; break;
+						case 'B' :out = 5; break;
+						case 'F' :out = 6; break;
+						//default:
+					} break;
+				case 'F' :
+					switch (opponent) {
+						case 'A' :out = 7; break;
+						case 'B' :out = 8; break;
+						case 'F' :out = 9; break;
+						//default:
+					} break;
 				//default:
-			} break;
-		case 'B' :
-			switch (opponent) {
-				case 'A' :out = 4; break;
-				case 'B' :out = 5; break;
-				case 'F' :out = 6; break;
+			}
+		} else { //the player is not dead, but the enemy is
+			switch (proponent) {
+				case 'A' :out = 10; break; 
+				case 'B' :out = 11; break;
+				case 'F' :out = 12; break;
 				//default:
-			} break;
-		case 'F' :
+			} 
+		}
+	} else { //the player is dead
+		if (enemy_hp > 0) {
 			switch (opponent) {
-				case 'A' :out = 7; break;
-				case 'B' :out = 8; break;
-				case 'F' :out = 9; break;
+				case 'A' :out = 14; break; 
+				case 'B' :out = 15; break;
+				case 'F' :out = 16; break;
 				//default:
-			} break;
-		//default:
+			} 
+		} else { //both player and enemy is dead
+			out = 13;
+		}
 	}
 	return out;
 }

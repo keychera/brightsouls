@@ -7,6 +7,12 @@ bvf <m> flanked <p>! <p> -<dmg> HP!
 fva <p> tried to flank but <m> attacks from front! <p> -<dmg> HP!
 fvb <p> flanked <m>! <m> -<dmg> HP!
 fvf <m> and <p> flanked each other! <m> -<dmg> HP! <p> -<dmg2> HP!
-stl <p> is as strong as <m> tho
-999 this shouldn't be printed thor
+avo you attacked the lifeless monster. you are overkilling it you heartless monster.
+bvo the enemy is dead but you blocked anyway. in case of sudden ghost vengeance coming from the <m>
+fvo you flanked the lifeless monster. you think it is a good training
+ddd you and the monster are both dead
+ova you somehow knows that the monster keeps attacking you even though you are dead
+ovb you are dead
+ovf you are dead
+999 this shouldn't be printed tho
 

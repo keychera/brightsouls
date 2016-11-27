@@ -3,7 +3,7 @@
 
 #include "boolean.h"
 
-#define strlength 99
+#define strlength 150
 #define idlength 5
 //file var for reader.c
 //static FILE * source;

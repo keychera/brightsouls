@@ -18,3 +18,8 @@ int abs(int n){
 		return -n;
 }
 
+int aboveZero(int n){
+	int out = (n > 0)? n : 0;
+	return out;
+}
+

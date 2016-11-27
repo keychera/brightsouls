@@ -9,4 +9,7 @@ int digit(int n);
 int abs(int n);
 //absolute val
 
+int aboveZero(int n);
+//value is either positive or zero
+
 #endif
