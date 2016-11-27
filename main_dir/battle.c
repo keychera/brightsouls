@@ -47,11 +47,11 @@ battle_outcome value table
 		battle_input();
 		battle_simulate();
 		battle_ongoing = (battle_round <= roundMax);
-		*battle_outcome = battle_conclude(roundMax);
+		*battle_outcome = battle_conclude(roundMax,monsterID);
 	}
 }
 
-int battle_conclude(int roundMax){
+int battle_conclude(int roundMax,int id){
 //battle_conlude return battle_outcome value
 	game_state = 5;
     if (player_hp > 0 && enemy_hp > 0) {
@@ -79,7 +79,10 @@ int battle_conclude(int roundMax){
         battle_display(0);
         while(getchar() != '\n');
 		battle_ongoing = false;
-		return 1;
+		if(!isBoss(id))
+            return 1;
+        else
+            return 4;
 	}
 	else if (player_hp <= 0 && enemy_hp > 0)
 	{

@@ -36,7 +36,7 @@
 //directives
 void battle_initiate(int monsterID,int monsterLVL,int *battle_outcome);
 //initiate the battle system, which consist of loading enemies, displaying battle interface, and simulate the battle process
-int battle_conclude(int roundMax);
+int battle_conclude(int roundMax, int id);
 //battle_conlude return battle_outcome value
 void battle_lvlup();
 //Calculate LVL UP Status
