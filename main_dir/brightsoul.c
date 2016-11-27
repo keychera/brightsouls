@@ -14,6 +14,7 @@
 #include "header_dir/battle.h" */
 //general purpose
 //#include "mystring.h" - moved to brightsoul.h
+#include "header_dir/jam.h"
 #include <stdio.h>
 
 int main() {

@@ -1,5 +1,6 @@
 #include "header_dir/boolean.h"
 #include "header_dir/jam.h"
+#include <stdio.h>
 
 /* ***************************************************************** */
 /* DEFINISI PRIMITIF                                                 */

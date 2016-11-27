@@ -11,6 +11,7 @@
 #include "mesinkata.h"
 #include "map.h"
 #include "tree.h"
+#include "jam.h"
 
 //formatting purposes
 #define RED   "\x1B[31m"    //merah
@@ -58,6 +59,7 @@ typedef struct CurMap {
 SkillStat DataSkill[SMax];
 PlayerStat Player;
 ELoc Enemy[EMax];
+JAM Time;
 //CurMap Map;
 //ListSubMap BigMap;
 Tree Skill;
