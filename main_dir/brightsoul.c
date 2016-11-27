@@ -95,7 +95,7 @@ int main() {
 		{
 			//load
 			Game(false);
-			message = 3;
+			message = 0;
 			InputValid = false; //key edit for looping instead of exiting
 		}
 		else if (input != 4)

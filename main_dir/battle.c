@@ -378,6 +378,7 @@ void battle_input(){
 	//battle_narrate('i',0);
 	battle_display(0);
 	int i = 1;
+	boolean wrong = false;
 	while (i != 6) {
 		if (i < 5) {
 			scanf(" %c",&inp);
@@ -388,11 +389,23 @@ void battle_input(){
 				}
 			} else {
 				//assumption : the input is always correct
-				player_action.T[player_action.HEAD + i] = inp; //Queue rep for player_action
-				i++;
-				if (i == 5) {
+				if ((inp == 'A') || (inp == 'B') || (inp == 'F')) {
+					player_action.T[player_action.HEAD + i] = inp; //Queue rep for player_action
+					i++;
+					if (i == 5) {
+						narrate_narrativeDel(&narratives);
+						narrate_narrativeAdd(&narratives,"C to confirm actions, E to delete last action");
+					} else {
+						if (wrong) {
+							wrong = false;
+							narrate_createEmpty(&narratives);
+							narrate_narrativeAdd(&narratives,"Please input your action");
+						}
+					}
+				} else {
+					if (!wrong) wrong = true;
 					narrate_narrativeDel(&narratives);
-					narrate_narrativeAdd(&narratives,"Any input but E to confirm actions, E to delete last action");
+					narrate_narrativeAdd(&narratives,"Wrong input for action, A for Attack, B for Block, F for flank");
 				}
 			}
 			battle_display(0);
@@ -401,10 +414,17 @@ void battle_input(){
 			if (inp == 'E') {
 				player_action.T[player_action.HEAD + i - 1] = '_'; //Queue rep for player_action
 				i--;
+				wrong = false;
 				narrate_narrativeDel(&narratives);
 				narrate_narrativeAdd(&narratives,"Please input your action");
 			} else {
-				i++;
+				if (inp == 'C') {
+					i++;
+				} else {
+					if (!wrong) wrong = true;
+					narrate_narrativeDel(&narratives);
+					narrate_narrativeAdd(&narratives,"Wrong input, C to confirm actions, E to delete last action");
+				}
 			}
 			battle_display(0);
 		}
