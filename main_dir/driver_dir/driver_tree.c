@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "tree.h"
-#include "mesinkata.h"
+#include "header_dir/tree.h"
+#include "header_dir/mesinkata.h"
 
 boolean EndKata;
 Kata CKata;

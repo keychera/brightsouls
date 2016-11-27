@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "mesinkata.h"
+#include "header_dir/mesinkata.h"
 
 //Contoh cara menggunakan mesin kata yang baru
 
