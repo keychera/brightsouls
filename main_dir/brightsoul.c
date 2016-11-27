@@ -52,9 +52,9 @@ int main() {
 		//key edit end
 		printf("pilih angka : ");
 		InputValid = true;
-		scanf("%d",&input);//pilih input		
+		scanf("%d",&input);//pilih input
 		if (input == 1) //new game
-		{			
+		{
 			//clearscreen
 			printf("Input nama : ");
 			scanf("%s",	Player.Nama);//input nama
@@ -70,11 +70,11 @@ int main() {
 			{
 				//setting player initial stat
 				Player.LVL = 1;
-				Player.HP = 25;
-				Player.STR = 8;
-				Player.DEF = 7;
+				Player.HP = 15;
+				Player.STR = 5;
+				Player.DEF = 3;
 				Player.EXP = 0;
-				Player.maxHP = 25;
+				Player.maxHP = 15;
 				Player.maxEXP = 100;
 				//initiate map
 				ImportSkill();
@@ -88,9 +88,9 @@ int main() {
 				message = 1;
 				InputValid = false;
 			}
-			
-		}			
-		
+
+		}
+
 		else if (input == 3) //load game
 		{
 			//load
@@ -98,22 +98,39 @@ int main() {
 			message = 0;
 			InputValid = false; //key edit for looping instead of exiting
 		}
+        else if (input == 99)
+        {
+            //cheat initialization
+            mystrcpy(Player.Nama,"ChuckNorris");
+            Player.LVL = 99;
+            Player.HP = 999;
+            Player.STR = 999;
+            Player.DEF = 99;
+            Player.EXP = 0;
+            Player.maxHP = 999;
+            Player.maxEXP = 999;
+            Load(false); //not sure with the parameter - key
+            ImportSkill();
+            Skill = ImportTree("data_dir/tree.txt");
+            Player.Spoint = 999;
+            Game(true);
+        }
 		else if (input != 4)
 		{
 			//printf("input salah \n"); key edit
 			message = 2;
 			InputValid = false;
 		}
-		
+
 	} while(input==1 || InputValid==false);
 	printf("\n");
-	
-    
-    
-    
-    
-   			
-	
+
+
+
+
+
+
+
 	/* battle testing, moved to map.c
 				;//because case 2 : is being an asshole
 				int battle_outcome;
